@@ -40,7 +40,7 @@ def gServiceAcct = 'jenkins'
     }
     stage ('Start Minecraft') {
        try {
-            // Assign a variable called isOnline to whatever the status of the compute instance is
+            // Assign a variable to whatever the status of the compute instance is
             def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
             def onlineCheck = checkStatus.trim()
             echo "The value retrieved is: ${onlineCheck}"
