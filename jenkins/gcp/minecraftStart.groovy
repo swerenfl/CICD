@@ -11,14 +11,6 @@
 // Start Pipeline
 node {
 
-// Set Props Variables
-def props = [:]
-    props['version'] = env.BUILD_NUMBER
-    props['emails'] = 'richard.staehler@gmail.com'
-    props['jobPath'] = env.JOB_NAME.split('/')
-    props['repo'] = props['jobPath'][-2]
-    props['branch'] = props['jobPath'][-1]
-
 // Set Build Variables
 def gProject = 'mc-server'
 def gInstance = 'minecraft-project-2019-11-03'
