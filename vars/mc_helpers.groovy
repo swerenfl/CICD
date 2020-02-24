@@ -51,7 +51,7 @@ def stopMinecraft(gProject, gZone) {
     }
 }
 
-int countJava(gInstance, gZone, gServiceAcct, gProject) {
+def countJava(gInstance, gZone, gServiceAcct, gProject) {
     int returnJava = sh returnStdout: true, script: """
         gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
         --command='ps -ef | grep java | wc -l' """
