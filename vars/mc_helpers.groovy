@@ -55,7 +55,7 @@ int countJava(gInstance, gZone, gServiceAcct, gProject) {
     int returnJava = sh returnStdout: true, script: """
         gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
         --command='ps -ef | grep java | wc -l' """
-    echo "Java is open this many times: ${returnJava}"
+    echo "Java is open this many times: " + returnJava
     return returnJava
 }
 
