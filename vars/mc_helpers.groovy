@@ -37,7 +37,16 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
 
 // stopMinecraftServer -- expecting 1 input
 def stopMinecraft(gProject, gZone) {
-    sh """
-        gcloud compute instances stop "${gProject}" --zone "${gZone}"
-    """
+    def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
+    def onlineCheck = checkStatus.trim()
+    echo "The value retrieved is: ${onlineCheck}"
+            
+    if (onlineCheck == "TERMINATED") {
+        echo "Nothing to do here."
+    }
+    else {
+        sh """
+            gcloud compute instances stop "${gProject}" --zone "${gZone}"
+        """
+    }
 }
