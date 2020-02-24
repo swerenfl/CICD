@@ -6,7 +6,6 @@
 
 =============================================== */
 
-
 // Load library
 @Library('CICD')_
 
@@ -23,6 +22,7 @@ def emailRecp = 'richard.staehler@gmail.com'
     // Preflight Stage
     stg_common.preflight()
 
+    // Start Minecraft Stage
     stage ('Start Minecraft') {
        try {
             // Assign a variable to whatever the status of the compute instance is
