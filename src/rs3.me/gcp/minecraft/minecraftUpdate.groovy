@@ -58,7 +58,7 @@ node {
             int javaInt = javaProcClean.toInteger()
             echo "The amount of Java processes open is ${javaInt}"
 
-            if (javaInt > 2) {
+            if (javaInt > 0) {
                 mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
             }
             else {
