@@ -56,7 +56,7 @@ def countJava(gInstance, gZone, gServiceAcct, gProject) {
         gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
         --command='ps -ef | grep java | wc -l' """
     echo "Java is open this many times: " + returnJava
-    return returnJava
+    return int
 }
 
 // killJava -- expecting 4 inputs
