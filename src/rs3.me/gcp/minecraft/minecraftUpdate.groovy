@@ -53,10 +53,12 @@ node {
     stage ('Prep') {
         // Kill the Java process
         try {
-            int javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-            echo "The amount of Java processes open is: " + javaProc
+            def javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            def javaProcClean = javaProc.trim()
+            int javaInt = javaProcClean.toInteger()
+            echo "The amount of Java processes open is ${javaInt}"
 
-            if (javaProc > 2) {
+            if (javaInt > 2) {
                 mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
             }
             else {
