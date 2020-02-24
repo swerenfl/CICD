@@ -50,3 +50,11 @@ def stopMinecraft(gProject, gZone) {
         """
     }
 }
+
+// killJava -- expecting 4 inputs
+def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
+    sh """
+        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
+        --command='sudo screen -S mcs -p 0 -X stuff "say ATTENTION: Server will shutdown in 30 seconds to update to version ${latestVersionClean}.\015"; sleep 30; sudo pkill java'
+    """
+}
