@@ -2,9 +2,7 @@
 
 /* ===============================================
 
-
                     PIPELINE
-
 
 =============================================== */
 
@@ -16,6 +14,11 @@ def gProject = 'mc-server'
 def gInstance = 'minecraft-project-2019-11-03'
 def gZone = 'us-central1-f'
 def gServiceAcct = 'jenkins'
+
+// Load Stage Files in
+env.rootDir = pwd()
+def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
+
 
     // Preflight Stage
     stage ('Preflight') {
@@ -62,7 +65,7 @@ def gServiceAcct = 'jenkins'
                         throw new Exception("Your server has been in a provisioning or starting stage for too long. Check on your server!")
                     }
                     else if (onlineCheck == "RUNNING") {
-                        startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                        mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
                     else {
                         throw new Exception("Unknown error. Check on your server!")
@@ -71,7 +74,7 @@ def gServiceAcct = 'jenkins'
 
                 // If it has started then run the startup sequence
                 else if (onlineCheck == "RUNNING") {
-                    startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 }
 
                 // If it's in some other state, then throw an exception
@@ -100,12 +103,12 @@ def gServiceAcct = 'jenkins'
 
                     // If the drive is mounted, then run the commands to start the screen without mounting
                     if (isMountedClean == "1") {
-                        startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                        mc_help.startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
 
                     // If the drive is NOT mounted, then run the commands to mount and start the screen
                     else if (isMounted == "0") {
-                        startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                        mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
 
                     // If anything else, then throw an error
@@ -147,43 +150,4 @@ def gServiceAcct = 'jenkins'
             throw err
         }
     }
-}
-
-/* ===============================================
-
-
-                    HELPERS
-
-
-=============================================== */
-
-def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
-    def runMCS = sh returnStdout:true, script: """
-        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" -- '#!/bin/bash
-            if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
-    echo "The value of runMCS: ${runMCS}"
-    return runMCS
-}
-
-def checkMounted(gInstance, gZone, gServiceAcct, gProject) {
-    def checkIfExists = sh returnStdout:true, script: """
-        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" -- '#!/bin/bash 
-            find /home/minecraft/server.jar -maxdepth 1 -type f | wc -l' """
-    echo "The value is: ${checkIfExists}"
-    return checkIfExists
-}
-
-def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
-    sh """
-        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" -- '#!/bin/bash
-            sudo mount /dev/disk/by-id/google-minecraft-disk /home/minecraft;
-            cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
-    """
-}
-
-def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
-    sh """
-        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" -- '#!/bin/bash
-            cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
-    """
 }
