@@ -51,6 +51,14 @@ def stopMinecraft(gProject, gZone) {
     }
 }
 
+def countJava(gInstance, gZone, gServiceAcct, gProject) {
+    int returnJava = sh returnStdout: true, script: """
+        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
+        --command='ps -ef | grep java | wc -l' """
+    echo "Java is open this many times: ${returnJava}"
+    return returnJava
+}
+
 // killJava -- expecting 4 inputs
 def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
     sh """

@@ -53,7 +53,16 @@ node {
     stage ('Prep') {
         // Kill the Java process
         try {
-            mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
+            def javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            def javaProcClean = javaProc.trim()
+            echo "The amount of Java processes open is ${isMountedClean}"
+
+            if (javaProcClean > 1) {
+                mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
+            }
+            else {
+                echo "No Java processes are running. Skipping"
+            }
         }
         catch (err) {
             def failureMessage = 'While killing Java something went wrong. Review logs for further details'
