@@ -85,7 +85,7 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
 
             // If compute instance is RUNNING
             else if (onlineCheck == "RUNNING") {
-                def mcsRun = mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                def mcsRun = mc_help.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 def mcsRunClean = mcsRun.trim()
                 echo "Is the minecraft screen running? ${mcsRunClean}"
 
@@ -97,7 +97,7 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
                 // If the instance is RUNNING, and the Minecraft Screen is NOT running, then we have to see if we actually mounted the drive
                 else {
                     echo "The status of the server is: ${onlineCheck}"
-                    def isMounted = checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    def isMounted = mc_help.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     def isMountedClean = isMounted.trim()
                     echo "The value of mounted is: ${isMountedClean}"
 
