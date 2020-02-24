@@ -36,8 +36,8 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
 }
 
 // stopMinecraftServer -- expecting 1 input
-def stopMinecraft(gProject) {
+def stopMinecraft(gProject, gZone) {
     sh """
-        gcloud compute instances stop "${gProject}"
+        gcloud compute instances stop "${gProject}" --zone "${gZone}"
     """
 }
