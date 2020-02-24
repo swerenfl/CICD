@@ -49,11 +49,10 @@ node {
         }
     }
 
-    // Prep the server
+    // Download the latest jar
     stage ('Prep') {
         // Kill the Java process
         try {
-            // Announce to users that MC is going to be shut down in 30 seconds
             mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
         }
         catch (err) {
