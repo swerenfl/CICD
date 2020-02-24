@@ -55,7 +55,7 @@ node {
         try {
             def javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             def javaProcClean = javaProc.trim()
-            echo "The amount of Java processes open is ${isMountedClean}"
+            echo "The amount of Java processes open is ${javaProcClean}"
 
             if (javaProcClean > 1) {
                 mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
