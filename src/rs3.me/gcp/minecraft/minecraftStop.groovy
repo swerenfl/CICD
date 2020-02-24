@@ -20,7 +20,7 @@ node {
     stg_common.preflight()
 
     // Stop Minecraft Stage
-    mc_helpers.stopMinecraft()
+    mc_helpers.stopMinecraft(gProject)
 
     // Notify users of the build using the emailext plugin.
     stg_common.notify(emailRecp)
