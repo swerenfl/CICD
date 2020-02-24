@@ -12,12 +12,12 @@
 // Start Pipeline
 node {
 
-// Set Build Variables
-def gProject = 'mc-server'
-def gInstance = 'minecraft-project-2019-11-03'
-def gZone = 'us-central1-f'
-def gServiceAcct = 'jenkins'
-def emailRecp = 'richard.staehler@gmail.com'
+    // Set Build Variables
+    def gProject = 'mc-server'
+    def gInstance = 'minecraft-project-2019-11-03'
+    def gZone = 'us-central1-f'
+    def gServiceAcct = 'jenkins'
+    def emailRecp = 'richard.staehler@gmail.com'
 
     // Preflight Stage
     stg_common.preflight()

@@ -34,3 +34,10 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
             cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
     """
 }
+
+// stopMinecraftServer -- expecting 1 input
+def stopMinecraft(gProject) {
+    sh """
+        gcloud compute instances "${gProject}"
+    """
+}
