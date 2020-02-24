@@ -6,6 +6,10 @@
 
 =============================================== */
 
+
+// Load library
+@Library('CICD')_
+
 // Start Pipeline
 node {
 
@@ -14,11 +18,6 @@ def gProject = 'mc-server'
 def gInstance = 'minecraft-project-2019-11-03'
 def gZone = 'us-central1-f'
 def gServiceAcct = 'jenkins'
-
-// Load Stage Files in
-env.rootDir = pwd()
-def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
-
 
     // Preflight Stage
     stage ('Preflight') {
@@ -65,7 +64,7 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
                         throw new Exception("Your server has been in a provisioning or starting stage for too long. Check on your server!")
                     }
                     else if (onlineCheck == "RUNNING") {
-                        mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                        mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
                     else {
                         throw new Exception("Unknown error. Check on your server!")
@@ -74,7 +73,7 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
 
                 // If it has started then run the startup sequence
                 else if (onlineCheck == "RUNNING") {
-                    mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 }
 
                 // If it's in some other state, then throw an exception
@@ -85,7 +84,7 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
 
             // If compute instance is RUNNING
             else if (onlineCheck == "RUNNING") {
-                def mcsRun = mc_help.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                def mcsRun = mc_helpers.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 def mcsRunClean = mcsRun.trim()
                 echo "Is the minecraft screen running? ${mcsRunClean}"
 
@@ -97,18 +96,18 @@ def mc_help = load "${rootDir}/.scripts/vars/mc_helpers.groovy"
                 // If the instance is RUNNING, and the Minecraft Screen is NOT running, then we have to see if we actually mounted the drive
                 else {
                     echo "The status of the server is: ${onlineCheck}"
-                    def isMounted = mc_help.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    def isMounted = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     def isMountedClean = isMounted.trim()
                     echo "The value of mounted is: ${isMountedClean}"
 
                     // If the drive is mounted, then run the commands to start the screen without mounting
                     if (isMountedClean == "1") {
-                        mc_help.startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                        mc_helpers.startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
 
                     // If the drive is NOT mounted, then run the commands to mount and start the screen
-                    else if (isMounted == "0") {
-                        mc_help.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    else if (isMountedClean == "0") {
+                        mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                     }
 
                     // If anything else, then throw an error
