@@ -18,6 +18,7 @@ node {
     def gZone = 'us-central1-f'
     def gServiceAcct = 'jenkins'
     def emailRecp = 'richard.staehler@gmail.com'
+    def slackNotifyChannel = '#08-gaming'
 
     def manifestURL = 'https://launchermeta.mojang.com/mc/game/version_manifest.json'
     def firstURLClean = 'null'
@@ -25,36 +26,28 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.preflight()
+        common_stages.preflight(slackNotifyChannel)
     }
 
     // Is server online or offline?
     stage ('Online Check') {
         try {
-            // Assign a variable to whatever the status of the compute instance is
-            def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
-            def onlineCheck = checkStatus.trim()
-            echo "The value retrieved is: ${onlineCheck}"
+            def isOffline = mc_helpers.checkUp()
             
-            // If it's running we can proceed
-            if (onlineCheck == "RUNNING" && ) {
+            // If it's running and drive is mount we can proceed
+            if (isOffline == "RUNNING" && ) {
                 echo "Your server is running and can proceed with the update."
             }
             // If it's any other status, just run the startMCS method which has a bunch of logic.
             else {
-                common_stages.startMCS(gInstance, gZone, gServiceAcct, gProject)
+                common_stages.startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel)
             }
         }
-        catch (Exception e) {
-            def failureMessage = "${e}"
-            echo "${failureMessage}" + ": " + Exception
-            currentBuild.result = 'FAILURE'
-            throw err
-        }
          catch (err) {
-            def failureMessage = 'While downloading something went wrong. Review logs for further details'
+            def failureMessage = 'While executing the online check something went wrong. Review logs for further details'
             echo "${failureMessage}" + ": " + err
             currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
     }
@@ -78,6 +71,7 @@ node {
             def failureMessage = 'While downloading something went wrong. Review logs for further details'
             echo "${failureMessage}" + ": " + err
             currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
     }
@@ -102,6 +96,7 @@ node {
             def failureMessage = 'While killing Java something went wrong. Review logs for further details'
             echo "${failureMessage}" + ": " + err
             currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
     }
