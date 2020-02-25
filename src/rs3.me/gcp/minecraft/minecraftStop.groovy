@@ -25,9 +25,9 @@ node {
     // Stop Minecraft Stage
     stage ('Stop Minecraft') {
         try {
-            mc_helpers.checkUp()
+            def isOffline = mc_helpers.checkUp()
             
-            if (onlineCheck == "TERMINATED") {
+            if (isOffline == "TERMINATED") {
                 echo "Nothing to do here."
             }
             else {
@@ -45,9 +45,9 @@ node {
     // Verify Termination
     stage ('Verify') {
         try {
-            mc_helpers.checkUp()
+            def isOffline = mc_helpers.checkUp()
             
-            if (onlineCheck == "TERMINATED") {
+            if (isOffline == "TERMINATED") {
                 echo "Your server is indeed terminated."
             }
             else {
