@@ -19,30 +19,10 @@ node {
     def gServiceAcct = 'jenkins'
     def emailRecp = 'richard.staehler@gmail.com'
     def slackNotifyChannel = '#08-gaming'
-
     def manifestURL = 'https://launchermeta.mojang.com/mc/game/version_manifest.json'
     def firstURLClean = 'null'
     def latestVersionClean = 'null'
     def installedVersionClean = 'null'
-
-    // What is the latest version?
-    def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
-    latestVersionClean = latestVersion.trim()
-    echo "The current latest version is: ${latestVersionClean}."
-
-    // What version do we have installed?
-    def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-    installedVersionClean = installedVersion.trim()
-    echo "The version we have installed is ${installedVersionClean}"
-
-    // Convert the versions into ints for comparison
-    int installedVersionInt = installedVersionClean.replace(".", "").toInteger()
-    int latestVersionInt = latestVersionClean.replace(".", "").toInteger()
-
-    if (latestVersionInt <= installedVersionInt) {
-        currentBuild.result = 'SUCCESS'
-        return
-    }
 
     // Preflight Stage
     stage ('Preflight') {
@@ -58,10 +38,10 @@ node {
                 def mountProc = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 def mountProcClean = mountProc.trim()
                 int mountInt = mountProcClean.toInteger()
-                echo "The amount of minecraft drives mounted is ${mountInt}"
+                echo "The amount of minecraft drives mounted is: ${mountInt}"
 
                 if (mountInt > 0) { // If running, and drive is mounted, we're good 
-                    echo "Your server is running and can proceed with the update."
+                    echo "Your server is running and can proceed with the update!"
                 }
                 else { // If running, and the drive is not mounted, then run the startup sequence
                     common_stages.startMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${slackNotifyChannel}")
@@ -83,6 +63,30 @@ node {
     // Discover the latest version of Minecraft
     stage ('Version Check') {
         try {
+            // What is the latest version?
+            def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
+            latestVersionClean = latestVersion.trim()
+            echo "The current latest version is: ${latestVersionClean}."
+
+            // What version do we have installed?
+            def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            installedVersionClean = installedVersion.trim()
+            echo "The version we have installed is ${installedVersionClean}"
+
+            // Convert the versions into ints for comparison
+            int installedVersionInt = installedVersionClean.replace(".", "").toInteger()
+            int latestVersionInt = latestVersionClean.replace(".", "").toInteger()
+
+            // Compare the versions
+            if (latestVersionInt == installedVersionInt) {
+                echo "Installed version " + installedVersionInt + " is equal to " + latestVersionInt + "."
+                currentBuild.result = 'SUCCESS'
+                return
+            }
+            else {
+                echo "Installed version " + installedVersionInt + " is less than " + latestVersionInt + ". We need to upgrade!"
+            }
+
             // Parse the URL associated with the latest version
             def firstURL = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'"""
             firstURLClean = firstURL.trim()
@@ -100,6 +104,11 @@ node {
             common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
+    }
+
+    // If versions match then exit the pipeline
+    if(currentBuild.result == 'SUCCESS') {
+        return 
     }
 
     // Prep the intance
