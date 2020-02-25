@@ -38,9 +38,9 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
 // checkUp -- checks the status of the server 
 def checkUp() {
     def checkStatus = sh returnStdout: true, script: """gcloud compute instances list --filter=${gZone} --format='value(status.scope())' """
-    def onlineCheck = checkStatus.trim()
-    echo "The value retrieved is: ${onlineCheck}"
-    return onlineCheck
+    def upCheck = checkStatus.trim()
+    echo "The value retrieved is: ${upCheck}"
+    return upCheck
 }
 
 // stopMinecraftServer -- expecting 2 inputs
@@ -66,3 +66,5 @@ def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
         --command='sudo screen -S mcs -p 0 -X stuff "say ATTENTION: Server will shutdown in 30 seconds to update to version ${latestVersionClean}.\015"; sleep 30; sudo pkill java'
     """
 }
+
+return this

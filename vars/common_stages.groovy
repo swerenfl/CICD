@@ -49,8 +49,7 @@ def notifySlack(slackNotifyChannel) {
 def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     try {
         // Assign a variable to whatever the status of the compute instance is
-        def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter=gZone --format="value(status.scope())"'
-        def onlineCheck = checkStatus.trim()
+        def onlineCheck = mc_helpers.checkUp()
         echo "The value retrieved is: ${onlineCheck}"
         
         // If the compute instance is offine, then start it and then run the startup sequence
@@ -60,8 +59,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
             sh "sleep 15"
 
             // Check if online for sure.
-            checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter=gZone --format="value(status.scope())"'
-            onlineCheck = checkStatus.trim()
+            onlineCheck = mc_helpers.checkUp()
             echo "The value retrieved is: ${onlineCheck}"
 
             // If still not started, wait another 60 secs then start again
@@ -69,8 +67,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
                 sh "sleep 60"
 
                 // Check again just to make sure
-                checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter=gZone --format="value(status.scope())"'
-                onlineCheck = checkStatus.trim()
+                onlineCheck = mc_helpers.checkUp()
                 echo "The value retrieved is: ${onlineCheck}"
 
                 // If still starting, exit as it's been too long, else if instance is running then run the startup sequence
@@ -78,7 +75,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
                     throw new Exception("Your server has been in a provisioning or starting stage for too long. Check on your server!")
                 }
                 else if (onlineCheck == "RUNNING") {
-                    mc_helpers.startMinecraftMount(gInstance, gZone, gServiceAcct, gProject)
+                    mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 }
                 else {
                     throw new Exception("Unknown error. Check on your server!")
@@ -87,7 +84,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
 
             // If it has started then run the startup sequence
             else if (onlineCheck == "RUNNING") {
-                mc_helpers.startMinecraftMount(gInstance, gZone, gServiceAcct, gProject)
+                mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             }
 
             // If it's in some other state, then throw an exception
@@ -98,7 +95,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
 
         // If compute instance is RUNNING
         else if (onlineCheck == "RUNNING") {
-            def mcsRun = mc_helpers.mcsRunning(gInstance, gZone, gServiceAcct, gProject)
+            def mcsRun = mc_helpers.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             def mcsRunClean = mcsRun.trim()
             echo "Is the minecraft screen running? ${mcsRunClean}"
 
@@ -110,18 +107,18 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
             // If the instance is RUNNING, and the Minecraft Screen is NOT running, then we have to see if we actually mounted the drive
             else {
                 echo "The status of the server is: ${onlineCheck}"
-                def isMounted = mc_helpers.checkMounted(gInstance, gZone, gServiceAcct, gProject)
+                def isMounted = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 def isMountedClean = isMounted.trim()
                 echo "The value of mounted is: ${isMountedClean}"
 
                 // If the drive is mounted, then run the commands to start the screen without mounting
                 if (isMountedClean == "1") {
-                    mc_helpers.startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject)
+                    mc_helpers.startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 }
 
                 // If the drive is NOT mounted, then run the commands to mount and start the screen
                 else if (isMountedClean == "0") {
-                    mc_helpers.startMinecraftMount(gInstance, gZone, gServiceAcct, gProject)
+                    mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
                 }
 
                 // If anything else, then throw an error

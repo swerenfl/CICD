@@ -20,7 +20,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.preflight(slackNotifyChannel)
+        common_stages.preflight("${slackNotifyChannel}")
     }
 
     // Stop Minecraft Stage
@@ -32,7 +32,7 @@ node {
                 echo "Nothing to do here."
             }
             else {
-                mc_helpers.stopMinecraft(gProject, gZone)
+                mc_helpers.stopMinecraft("${gProject}", "${gZone}")
             }
         }
         catch (err) {
@@ -67,8 +67,8 @@ node {
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        common_stages.notifyEmail(emailRecp, slackNotifyChannel)
-        common_stages.notifySlack(slackNotifyChannel)
+        common_stages.notifyEmail("${emailRecp}", "${slackNotifyChannel}")
+        common_stages.notifySlack("${slackNotifyChannel}")
     }
 
 }
