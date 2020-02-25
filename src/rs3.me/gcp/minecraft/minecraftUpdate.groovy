@@ -24,7 +24,40 @@ node {
     def latestVersionClean = 'null'
 
     // Preflight Stage
-    stg_common.preflight()
+    stage ('Preflight') {
+        stg_common.preflight()
+    }
+
+    // Is server online or offline?
+    stage ('Online Check') {
+        try {
+            // Assign a variable to whatever the status of the compute instance is
+            def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
+            def onlineCheck = checkStatus.trim()
+            echo "The value retrieved is: ${onlineCheck}"
+            
+            // If it's running we can proceed
+            if (onlineCheck == "RUNNING" && ) {
+                echo "Your server is running and can proceed with the update."
+            }
+            // If it's any other status, just run the startMCS method which has a bunch of logic.
+            else {
+                stg_common.startMCS(gInstance, gZone, gServiceAcct, gProject)
+            }
+        }
+        catch (Exception e) {
+            def failureMessage = "${e}"
+            echo "${failureMessage}" + ": " + Exception
+            currentBuild.result = 'FAILURE'
+            throw err
+        }
+         catch (err) {
+            def failureMessage = 'While downloading something went wrong. Review logs for further details'
+            echo "${failureMessage}" + ": " + err
+            currentBuild.result = 'FAILURE'
+            throw err
+        }
+    }
 
     // Start Minecraft Stage
     stage ('Version Check') {
@@ -72,4 +105,10 @@ node {
             throw err
         }
     }
+
+    // Notify users of the build using the emailext plugin.
+    stage ('Notify') {
+        stg_common.notifyEmail(emailRecp)
+    }
+    
 }

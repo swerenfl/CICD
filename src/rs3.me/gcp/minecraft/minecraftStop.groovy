@@ -18,20 +18,33 @@ node {
     def emailRecp = 'richard.staehler@gmail.com'
 
     // Preflight Stage
-    stg_common.preflight()
+    stage ('Preflight') {
+        stg_common.preflight()
+    }
 
     // Stop Minecraft Stage
     stage ('Stop Minecraft') {
-        mc_helpers.stopMinecraft(gProject, gZone)
-    }
+        try {
+            mc_helpers.checkUp()
+            
+            if (onlineCheck == "TERMINATED") {
+                echo "Nothing to do here."
+            }
+            else {
+                mc_helpers.stopMinecraft(gProject, gZone)
+            }
+        }
+        catch (err) {
+            def failureMessage = 'While stopping the server something went wrong. Review logs for further details'
+            echo "${failureMessage}" + ": " + err
+            currentBuild.result = 'FAILURE'
+            throw err
+        }
 
     // Verify Termination
     stage ('Verify') {
         try {
-            // Assign a variable to whatever the status of the compute instance is
-            def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
-            def onlineCheck = checkStatus.trim()
-            echo "The value retrieved is: ${onlineCheck}"
+            mc_helpers.checkUp()
             
             if (onlineCheck == "TERMINATED") {
                 echo "Your server is indeed terminated."
@@ -49,6 +62,8 @@ node {
     }
 
     // Notify users of the build using the emailext plugin.
-    stg_common.notify(emailRecp)
+    stage ('Notify') {
+        stg_common.notifyEmail(emailRecp)
+    }
 
 }
