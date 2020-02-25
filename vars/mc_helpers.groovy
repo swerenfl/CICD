@@ -4,7 +4,7 @@
 def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
     def runMCS = sh returnStdout:true, script: """
         gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
-            --command '#!/bin/bash if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
+        --command='#!/bin/bash if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
     echo "The value of runMCS: ${runMCS}"
     return runMCS
 }
@@ -12,8 +12,8 @@ def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
 // checkMounted -- expecting 4 inputs
 def checkMounted(gInstance, gZone, gServiceAcct, gProject) {
     def checkIfExists = sh returnStdout:true, script: """
-        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \ 
-            --command='#!/bin/bash find /home/minecraft/server.jar -maxdepth 1 -type f | wc -l' """
+        gcloud compute ssh --project "${gInstance}" --zone "${gZone}" "${gServiceAcct}"@"${gProject}" \
+        --command='#!/bin/bash find /home/minecraft/server.jar -maxdepth 1 -type f | wc -l' """
     echo "The value is: ${checkIfExists}"
     return checkIfExists
 }
