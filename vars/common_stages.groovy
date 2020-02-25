@@ -1,7 +1,7 @@
 #!groovy
 
 // preflight stage -- common across pipelines
-def preflight() {
+def preflight(slackNotifyChannel) {
     try {
         echo "Set limit to Discard old builds. Keep last 10 builds. Further, disallow concurrent builds."
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')), disableConcurrentBuilds()])
@@ -10,26 +10,43 @@ def preflight() {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
         echo "${failureMessage}" + ": " + err
         currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
         throw err
     }
 }
 
 // notify stage -- common across pipelines
-def notifyEmail(emailRecp) {
+def notifyEmail(emailRecp, slackNotifyChannel) {
     try {
         echo "Send email"
         emailext attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
     }
     catch (err) {
-        def failureMessage = 'While notifying, something went wrong. Review logs for further details'
+        def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'
         echo "${failureMessage}" + ": " + err
         currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
         throw err
     }
 }
 
-// start minecraft -- common, needs 4 inputs. Note: No STAGE wrapper
-def startMCS(gInstance, gZone, gServiceAcct, gProject) {
+// notify stage -- Slack -- common across pipelines
+def notifySlack(slackNotifyChannel) {
+    try {
+        echo "Notify Slack"
+        common_helpers.notifySlackSuccess("${slackNotifyChannel}")
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
+        echo "${failureMessage}" + ": " + err
+        currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+        throw err
+    }
+}
+
+// start minecraft -- common, needs 5 inputs.
+def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     try {
         // Assign a variable to whatever the status of the compute instance is
         def checkStatus = sh returnStdout: true, script: 'gcloud compute instances list --filter="${gZone}" --format="value(status.scope())"'
@@ -129,6 +146,9 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
         def failureMessage = 'While connecting and starting, something went wrong. Review logs for further details'
         echo "${failureMessage}" + ": " + err
         currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
         throw err
     }
 }
+
+return this

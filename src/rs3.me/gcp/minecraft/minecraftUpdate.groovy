@@ -25,7 +25,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        stg_common.preflight()
+        common_stages.preflight()
     }
 
     // Is server online or offline?
@@ -42,7 +42,7 @@ node {
             }
             // If it's any other status, just run the startMCS method which has a bunch of logic.
             else {
-                stg_common.startMCS(gInstance, gZone, gServiceAcct, gProject)
+                common_stages.startMCS(gInstance, gZone, gServiceAcct, gProject)
             }
         }
         catch (Exception e) {
@@ -108,7 +108,7 @@ node {
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        stg_common.notifyEmail(emailRecp)
+        common_stages.notifyEmail(emailRecp)
     }
-    
+
 }

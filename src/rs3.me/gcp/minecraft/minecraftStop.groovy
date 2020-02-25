@@ -19,7 +19,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        stg_common.preflight()
+        common_stages.preflight()
     }
 
     // Stop Minecraft Stage
@@ -64,7 +64,7 @@ node {
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        stg_common.notifyEmail(emailRecp)
+        common_stages.notifyEmail(emailRecp)
     }
 
 }
