@@ -35,6 +35,26 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
     """
 }
 
+// backup MCS -- expecting 4 inputs
+def backupMCS(gInstance, gZone, gServiceAcct, gProject) {
+    sh """
+        gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+            --command='cd /home && sudo rm -rf minecraft.bak && sudo cp -avr /home/minecraft/ /home/minecraft.bak/ && \
+            sudo cp /home/minecraft/server.jar /home/minecraft/server.jar.bak && \
+            sudo rm -rf /home/minecraft/server.jar'
+    """
+}
+
+// fetch latest -- expecting 5 inputs
+def getLatest(gInstance, gZone, gServiceAcct, gProject, secondURLClean) {
+    sh """
+    gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+        --command='cd /home/minecraft && \
+        sudo wget ${secondURLClean} && \
+        sudo chmod 644 /home/minecraft/server.jar'
+    """
+}
+
 // checkUp -- checks the status of the server 
 def checkUp(gZone) {
     def checkStatus = sh returnStdout: true, script: """gcloud compute instances list --filter=${gZone} --format='value(status.scope())' """

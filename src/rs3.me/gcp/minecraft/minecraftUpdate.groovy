@@ -60,7 +60,7 @@ node {
         }
     }
 
-    // Start Minecraft Stage
+    // Discover the latest version of Minecraft
     stage ('Version Check') {
         try {
             def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
@@ -84,10 +84,9 @@ node {
         }
     }
 
-    // Download the latest jar
+    // Prep the intance
     stage ('Prep') {
-        // Kill the Java process
-        try {
+        try { // Kill the Java process
             def javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             def javaProcClean = javaProc.trim()
             int javaInt = javaProcClean.toInteger()
@@ -107,6 +106,38 @@ node {
             common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
+
+        try { // Backup the drives
+            echo "Backup the old server.jar"
+            mc_helpers.backupMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+        }
+        catch (err) {
+            def failureMessage = 'While backing up something went wrong. Review logs for further details'
+            echo "${failureMessage}" + ": " + err
+            currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+            throw err
+        }
+    }
+
+    // Fetch the file and put it in its place
+    stage ('Upgrade') {
+        try {
+            echo "Get the latest server.jar"
+            mc_helpers.getLatest("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${secondURLClean}")
+        }
+        catch (err) {
+            def failureMessage = 'While upgrading went wrong. Review logs for further details'
+            echo "${failureMessage}" + ": " + err
+            currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+            throw err
+        }
+    }
+
+    // Start Minecraft after the upgrade
+    stage ('Start Minecraft') {
+        common_stages.startMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${slackNotifyChannel}")
     }
 
     // Notify users of the build using the emailext plugin.
