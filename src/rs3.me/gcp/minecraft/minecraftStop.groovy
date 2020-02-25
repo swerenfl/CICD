@@ -20,7 +20,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.preflight()
+        common_stages.preflight(slackNotifyChannel)
     }
 
     // Stop Minecraft Stage
