@@ -33,17 +33,21 @@ node {
     stage ('Online Check') {
         try {
             def isOffline = mc_helpers.checkUp("${gZone}")
-            def mountProc = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-            def mountProcClean = mountProc.trim()
-            int mountInt = mountProcClean.toInteger()
-            echo "The amount of minecraft drives mounted is ${mountInt}"
-            
-            // If it's running and drive is mount we can proceed
-            if (isOffline == "RUNNING" && mountInt > 0) {
-                echo "Your server is running and can proceed with the update."
+
+            if (isOffline == "RUNNING") { // If running, then make sure the drive is mounted
+                def mountProc = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                def mountProcClean = mountProc.trim()
+                int mountInt = mountProcClean.toInteger()
+                echo "The amount of minecraft drives mounted is ${mountInt}"
+
+                if (mountInt > 0) { // If running, and drive is mounted, we're good 
+                    echo "Your server is running and can proceed with the update."
+                }
+                else { // If running, and the drive is not mounted, then run the startup sequence
+                    common_stages.startMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${slackNotifyChannel}")
+                }
             }
-            // If it's any other status, just run the startMCS method which has a bunch of logic.
-            else {
+            else { // Run the startup sequence because the server is not running
                 common_stages.startMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${slackNotifyChannel}")
             }
         }
