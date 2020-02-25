@@ -16,6 +16,7 @@ node {
     def gProject = 'mc-server'
     def gZone = 'us-central1-f'
     def emailRecp = 'richard.staehler@gmail.com'
+    def slackNotifyChannel = '#08-gaming'
 
     // Preflight Stage
     stage ('Preflight') {
@@ -38,6 +39,7 @@ node {
             def failureMessage = 'While stopping the server something went wrong. Review logs for further details'
             echo "${failureMessage}" + ": " + err
             currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
     }
@@ -58,6 +60,7 @@ node {
             def failureMessage = "${e}"
             echo "${failureMessage}" + ": " + Exception
             currentBuild.result = 'FAILURE'
+            common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
             throw err
         }
     }
@@ -65,6 +68,7 @@ node {
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
         common_stages.notifyEmail(emailRecp)
+        common_stages.notifySlack(slackNotifyChannel)
     }
 
 }

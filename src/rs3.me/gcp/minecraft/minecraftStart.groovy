@@ -33,5 +33,6 @@ node {
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
         common_stages.notifyEmail(emailRecp, slackNotifyChannel)
+        common_stages.notifySlack(slackNotifyChannel)
     }
 }
