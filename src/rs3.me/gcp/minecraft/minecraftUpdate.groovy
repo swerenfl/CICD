@@ -33,9 +33,13 @@ node {
     stage ('Online Check') {
         try {
             def isOffline = mc_helpers.checkUp()
+            def mountProc = mc_helpers.checkMounted(gInstance, gZone, gServiceAcct, gProject)
+            def mountProcClean = mountProc.trim()
+            int mountInt = mountProcClean.toInteger()
+            echo "The amount of minecraft drives mounted is ${mountInt}"
             
             // If it's running and drive is mount we can proceed
-            if (isOffline == "RUNNING" && ) {
+            if (isOffline == "RUNNING" && mountInt > 0) {
                 echo "Your server is running and can proceed with the update."
             }
             // If it's any other status, just run the startMCS method which has a bunch of logic.
@@ -59,7 +63,7 @@ node {
             latestVersionClean = latestVersion.trim()
             echo "The current latest version is: ${latestVersionClean}."
 
-            def firstURL = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'"""
+            def firstURL = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.versions[] | select( .id == (latestVersionClean))' | jq -r '.url'"""
             firstURLClean = firstURL.trim()
             echo "The current URL for the latest version is: ${firstURLClean}."
 
@@ -80,13 +84,13 @@ node {
     stage ('Prep') {
         // Kill the Java process
         try {
-            def javaProc = mc_helpers.countJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            def javaProc = mc_helpers.countJava(gInstance, gZone, gServiceAcct, gProject)
             def javaProcClean = javaProc.trim()
             int javaInt = javaProcClean.toInteger()
             echo "The amount of Java processes open is ${javaInt}"
 
             if (javaInt > 0) {
-                mc_helpers.killJava("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${latestVersionClean}")
+                mc_helpers.killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean)
             }
             else {
                 echo "No Java processes are running. Skipping"
@@ -103,7 +107,8 @@ node {
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        common_stages.notifyEmail(emailRecp)
+        common_stages.notifyEmail(emailRecp, slackNotifyChannel)
+        common_stages.notifySlack(slackNotifyChannel)
     }
 
 }
