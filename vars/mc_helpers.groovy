@@ -46,7 +46,7 @@ def checkUp(gZone) {
 // stopMinecraftServer -- expecting 2 inputs
 def stopMinecraft(gProject, gZone) {
     sh """
-        gcloud compute instances stop gProject --zone ${gZone}
+        gcloud compute instances stop ${gProject} --zone ${gZone}
     """
 }
 
