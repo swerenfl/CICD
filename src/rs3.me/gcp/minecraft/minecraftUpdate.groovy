@@ -33,7 +33,7 @@ node {
     // What version do we have installed?
     def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
     installedVersionClean = installedVersion.trim()
-    echo "The version we have installed is ${installedVersionInt}"
+    echo "The version we have installed is ${installedVersionClean}"
 
     // Convert the versions into ints for comparison
     int installedVersionInt = installedVersionClean.replace(".", "").toInteger()
