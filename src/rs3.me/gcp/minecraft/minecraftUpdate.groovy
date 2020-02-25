@@ -32,7 +32,7 @@ node {
     // Is server online or offline?
     stage ('Online Check') {
         try {
-            def isOffline = mc_helpers.checkUp()
+            def isOffline = mc_helpers.checkUp("${gZone}")
             def mountProc = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             def mountProcClean = mountProc.trim()
             int mountInt = mountProcClean.toInteger()

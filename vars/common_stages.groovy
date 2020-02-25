@@ -49,7 +49,7 @@ def notifySlack(slackNotifyChannel) {
 def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     try {
         // Assign a variable to whatever the status of the compute instance is
-        def onlineCheck = mc_helpers.checkUp()
+        def onlineCheck = mc_helpers.checkUp("${gZone}")
         echo "The value retrieved is: ${onlineCheck}"
         
         // If the compute instance is offine, then start it and then run the startup sequence
@@ -59,7 +59,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
             sh "sleep 15"
 
             // Check if online for sure.
-            onlineCheck = mc_helpers.checkUp()
+            onlineCheck = mc_helpers.checkUp("${gZone}")
             echo "The value retrieved is: ${onlineCheck}"
 
             // If still not started, wait another 60 secs then start again
@@ -67,7 +67,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
                 sh "sleep 60"
 
                 // Check again just to make sure
-                onlineCheck = mc_helpers.checkUp()
+                onlineCheck = mc_helpers.checkUp("${gZone}")
                 echo "The value retrieved is: ${onlineCheck}"
 
                 // If still starting, exit as it's been too long, else if instance is running then run the startup sequence

@@ -36,7 +36,7 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
 }
 
 // checkUp -- checks the status of the server 
-def checkUp() {
+def checkUp(gZone) {
     def checkStatus = sh returnStdout: true, script: """gcloud compute instances list --filter=${gZone} --format='value(status.scope())' """
     def upCheck = checkStatus.trim()
     echo "The value retrieved is: ${upCheck}"
