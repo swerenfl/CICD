@@ -23,6 +23,7 @@ node {
     def manifestURL = 'https://launchermeta.mojang.com/mc/game/version_manifest.json'
     def firstURLClean = 'null'
     def latestVersionClean = 'null'
+    def installedVersionClean = 'null'
 
     // Preflight Stage
     stage ('Preflight') {
@@ -63,9 +64,18 @@ node {
     // Discover the latest version of Minecraft
     stage ('Version Check') {
         try {
+            // What is the latest version
             def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
             latestVersionClean = latestVersion.trim()
             echo "The current latest version is: ${latestVersionClean}."
+
+            la
+
+            // What version do we have installed?
+            def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            installedVersionClean = installedVersion.trim().replace(".", "")
+            int installedVersionInt = installedVersionClean.toInteger()
+            echo "The version we have installed is ${installedVersionInt}"
 
             def firstURL = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'"""
             firstURLClean = firstURL.trim()

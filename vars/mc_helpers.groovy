@@ -4,7 +4,7 @@
 def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
     def runMCS = sh returnStdout:true, script: """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command='if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
+        --command='if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
     echo "The value of runMCS: ${runMCS}"
     return runMCS
 }
@@ -13,7 +13,7 @@ def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
 def checkMounted(gInstance, gZone, gServiceAcct, gProject) {
     def checkIfExists = sh returnStdout:true, script: """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command='find /home/minecraft/server.jar -maxdepth 1 -type f | wc -l' """
+        --command='find /home/minecraft/server.jar -maxdepth 1 -type f | wc -l' """
     echo "The value is: ${checkIfExists}"
     return checkIfExists
 }
@@ -22,8 +22,8 @@ def checkMounted(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command='sudo mount /dev/disk/by-id/google-minecraft-disk /home/minecraft; \
-            cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
+        --command='sudo mount /dev/disk/by-id/google-minecraft-disk /home/minecraft; \
+        cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
     """
 }
 
@@ -31,7 +31,7 @@ def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
+        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
     """
 }
 
@@ -39,20 +39,29 @@ def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
 def backupMCS(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command='cd /home && sudo rm -rf minecraft.bak && sudo cp -avr /home/minecraft/ /home/minecraft.bak/ && \
-            sudo cp /home/minecraft/server.jar /home/minecraft/server.jar.bak && \
-            sudo rm -rf /home/minecraft/server.jar'
+        --command='cd /home && sudo rm -rf minecraft.bak && sudo cp -avr /home/minecraft/ /home/minecraft.bak/ && \
+        sudo cp /home/minecraft/server.jar /home/minecraft/server.jar.bak && \
+        sudo rm -rf /home/minecraft/server.jar'
     """
 }
 
 // fetch latest -- expecting 5 inputs
 def getLatest(gInstance, gZone, gServiceAcct, gProject, secondURLClean) {
     sh """
-    gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+        gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
         --command='cd /home/minecraft && \
         sudo wget ${secondURLClean} && \
         sudo chmod 644 /home/minecraft/server.jar'
     """
+}
+
+def versionCk(gInstance, gZone, gServiceAcct, gProject) {
+    def versionCheck = sh returnStdout: true, script: """
+        gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+        --command='cd /home/minecraft && \
+        sudo unzip -p server.jar version.json | jq -r '.name' """
+        echo "The version we have installed is: ${versionCheck}"
+    return versionCheck
 }
 
 // checkUp -- checks the status of the server 
