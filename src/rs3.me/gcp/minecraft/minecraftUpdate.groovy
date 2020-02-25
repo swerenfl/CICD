@@ -25,6 +25,25 @@ node {
     def latestVersionClean = 'null'
     def installedVersionClean = 'null'
 
+    // What is the latest version?
+    def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
+    latestVersionClean = latestVersion.trim()
+    echo "The current latest version is: ${latestVersionClean}."
+
+    // What version do we have installed?
+    def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+    installedVersionClean = installedVersion.trim()
+    echo "The version we have installed is ${installedVersionInt}"
+
+    // Convert the versions into ints for comparison
+    int installedVersionInt = installedVersionClean.replace(".", "").toInteger()
+    int latestVersionInt = latestVersionClean.replace(".", "").toInteger()
+
+    if (latestVersionInt <= installedVersionInt) {
+        currentBuild.result = 'SUCCESS'
+        return
+    }
+
     // Preflight Stage
     stage ('Preflight') {
         common_stages.preflight("${slackNotifyChannel}")
@@ -64,23 +83,12 @@ node {
     // Discover the latest version of Minecraft
     stage ('Version Check') {
         try {
-            // What is the latest version
-            def latestVersion = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.latest.release'"""
-            latestVersionClean = latestVersion.trim()
-            echo "The current latest version is: ${latestVersionClean}."
-
-            la
-
-            // What version do we have installed?
-            def installedVersion = mc_helpers.versionCk("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-            installedVersionClean = installedVersion.trim().replace(".", "")
-            int installedVersionInt = installedVersionClean.toInteger()
-            echo "The version we have installed is ${installedVersionInt}"
-
+            // Parse the URL associated with the latest version
             def firstURL = sh returnStdout: true, script: """curl -sSL '${manifestURL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'"""
             firstURLClean = firstURL.trim()
             echo "The current URL for the latest version is: ${firstURLClean}."
 
+            // Obtain the download link from the URL
             def secondURL = sh returnStdout: true, script: """curl -sSL '${firstURLClean}' | jq -r '.downloads.server.url'"""
             secondURLClean = secondURL.trim()
             echo "The download link is: ${secondURLClean}."
