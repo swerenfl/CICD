@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!groovy
 
 def notifySlackSuccess(channel) {
   slackSend channel: "${channel}", color: 'good', message: "SUCCESS! Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
