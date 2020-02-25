@@ -40,6 +40,7 @@ node {
             currentBuild.result = 'FAILURE'
             throw err
         }
+    }
 
     // Verify Termination
     stage ('Verify') {
