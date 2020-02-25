@@ -11,3 +11,5 @@ def notifySlackUnstable(channel, jobFix) {
 def notifySlackFail(channel, message, error) {
   slackSend channel: "${channel}", color: 'danger', message: "FAILED! Error: ${message} | Reason: ${error} | Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 }
+
+return this
