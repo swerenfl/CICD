@@ -15,6 +15,21 @@ def preflight(slackNotifyChannel) {
     }
 }
 
+// start stage -- Slack -- common across pipelines
+def startSlack(slackNotifyChannel) {
+    try {
+        echo "Notify Slack"
+        common_helpers.notifySlackStart("${slackNotifyChannel}")
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Slack at the start of the build, something went wrong. Review logs for further details'
+        echo "${failureMessage}" + ": " + err
+        currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+        throw err
+    }
+}
+
 // notify stage -- common across pipelines
 def notifyEmail(emailRecp, slackNotifyChannel) {
     try {
