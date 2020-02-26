@@ -22,6 +22,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
+        common_stages.startSlack("${slackNotifyChannel}")
         common_stages.preflight("${slackNotifyChannel}")
     }
 
