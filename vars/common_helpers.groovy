@@ -16,3 +16,4 @@ def notifySlackStart(channel) {
   slackSend channel: "${channel}", color: '#4a90e2', message: "STARTED! Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 }
 
+return this
