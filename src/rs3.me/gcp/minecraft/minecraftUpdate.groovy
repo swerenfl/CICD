@@ -109,6 +109,7 @@ node {
 
     // If versions match then exit the pipeline
     if(currentBuild.result == 'SUCCESS') {
+        common_stages.notifySlack("${slackNotifyChannel}")
         return 
     }
 
