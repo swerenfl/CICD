@@ -2,12 +2,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna magna, sagitti
 
 <br /><br />
 <b>TEST 123</b>
+<br />
 Specifies a registry URL such as https://docker.mycorp.com/, plus an optional credentials ID to connect to it.
 
 <br /><br />
 <b>TEST 456</b>
+<br />
 Specifies a server URI such as tcp://swarm.mycorp.com:2376, plus an optional credentials ID to connect to it.
 
 <br /><br />
 <b>TEST 789</b>
+<br />
 Specifies the name of a Docker installation to use, if any are defined in Jenkins global configuration. If unspecified, docker is assumed to be in the $PATH of the Jenkins agent.
