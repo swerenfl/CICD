@@ -3,10 +3,10 @@
    You can leverage the helpers/methods as such:
 </p>
 <p></p>
-<code>stage ('Preflight') {
+<pre>stage ('Preflight') {
    common_stages.startSlack("${slackNotifyChannel}")
    common_stages.preflight("${slackNotifyChannel}")
-}</code>
+}</pre>
 <p>
    The following is a general list of helpers/methods that are available.
 </p>
