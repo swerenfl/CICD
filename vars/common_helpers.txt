@@ -5,19 +5,19 @@
           You can leverage the helpers/methods as such:
        </p>
        <p></p>
-       <pre>common_helpers.notifySlackStart()</pre>
+       <code>common_helpers.notifySlackStart()</code>
        <p>
           The following is a general list of helpers/methods that are available.
        </p>
        <dl class="slack-vars">
           <dt>notifySlackSuccess()</dt>
-          <dd>This method sends a message to Slack in the form of SUCCESS, and accepts one input. As of this writing it is expecting <pre>channel</pre>. <pre>channel</pre> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
+          <dd>This method sends a message to Slack in the form of SUCCESS, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
           <dt>notifySlackUnstable()</dt>
-          <dd>This method sends a message to Slack in the form of UNSTABLE, and accepts one input. As of this writing it is expecting <pre>channel</pre>. <pre>channel</pre> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
+          <dd>This method sends a message to Slack in the form of UNSTABLE, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
           <dt>notifySlackFail()</dt>
-          <dd>This method sends a message to Slack in the form of FAILED, and accepts three inputs. As of this writing it is expecting <pre>channel</pre>, <pre>message</pre>, and <pre>error</pre>. <pre>channel</pre> is the channel name where are want to send the Slack notification. <pre>message</pre> is the error message you want to present to the user (usually defined in the <pre>catch</pre> statement. <pre>error</pre> is the system generated error message. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
+          <dd>This method sends a message to Slack in the form of FAILED, and accepts three inputs. As of this writing it is expecting <code>channel</code>, <code>message</code>, and <code>error</code>. <code>channel</code> is the channel name where are want to send the Slack notification. <code>message</code> is the error message you want to codesent to the user (usually defined in the <code>catch</code> statement. <code>error</code> is the system generated error message. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
           <dt>notifySlackStart()</dt>
-          <dd>This method sends a message to Slack in the form of STARTED, and accepts one input. As of this writing it is expecting <pre>channel</pre>. <pre>channel</pre> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
+          <dd>This method sends a message to Slack in the form of STARTED, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where are want to send the Slack notification. If a channel is not speficied it should default to the channel configured in the global settings.</dd>
        </dl>
     </div>
  </dd>
