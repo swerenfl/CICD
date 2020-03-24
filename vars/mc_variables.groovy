@@ -1,0 +1,3 @@
+#!groovy
+
+// Put variables here?

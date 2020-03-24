@@ -1,0 +1,19 @@
+<p>
+   The common helpers file contains helpers/methods that are to be used across all pipelines.
+   You can leverage the helpers/methods as such:
+</p>
+<p></p>
+<code>common_helpers.notifySlackStart()</code>
+<p>
+   The following is a general list of helpers/methods that are available.
+</p>
+<dl class="slack-vars">
+   <dt>notifySlackSuccess()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of SUCCESS, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackUnstable()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of UNSTABLE, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackFail()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of FAILED, and accepts three inputs. As of this writing it is expecting <code>channel</code>, <code>message</code>, and <code>error</code>. <code>channel</code> is the channel name where you want to send the Slack notification. <code>message</code> is the error message you want to present to the user (usually defined in the <code>catch</code> statement. <code>error</code> is the system generated error message. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackStart()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of STARTED, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+</dl>

@@ -4,7 +4,7 @@ def notifySlackSuccess(channel) {
   slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 }
 
-def notifySlackUnstable(channel, jobFix) {
+def notifySlackUnstable(channel) {
   slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 }
 
