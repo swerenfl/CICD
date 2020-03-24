@@ -1,10 +1,19 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed urna magna, sagittis vitae lectus non, lacinia tempor neque. Cras molestie felis a tortor fermentum, ut fringilla libero consequat. Curabitur efficitur aliquet neque auctor sollicitudin. Nunc eu auctor est. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In blandit interdum purus sit amet vestibulum. Sed rutrum mauris sapien, eget vulputate est vestibulum vel. Mauris ac odio porttitor, vulputate ex eget, auctor enim. Morbi semper interdum turpis condimentum viverra. Donec id massa vel sapien ornare malesuada. Aenean in placerat lacus. Integer tortor dolor, suscipit quis sollicitudin ac, mollis at nibh.
-
-<b>TEST 123</b>
-Specifies a registry URL such as https://docker.mycorp.com/, plus an optional credentials ID to connect to it.
-
-<b>TEST 456</b>
-Specifies a server URI such as tcp://swarm.mycorp.com:2376, plus an optional credentials ID to connect to it.
-
-<b>TEST 789</b>
-Specifies the name of a Docker installation to use, if any are defined in Jenkins global configuration. If unspecified, docker is assumed to be in the $PATH of the Jenkins agent.
+<p>
+   The common helpers file contains helpers/methods that are to be used across all pipelines.
+   You can leverage the helpers/methods as such:
+</p>
+<p></p>
+<code>common_helpers.notifySlackStart()</code>
+<p>
+   The following is a general list of helpers/methods that are available.
+</p>
+<dl class="slack-vars">
+   <dt>notifySlackSuccess()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of SUCCESS, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackUnstable()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of UNSTABLE, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackFail()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of FAILED, and accepts three inputs. As of this writing it is expecting <code>channel</code>, <code>message</code>, and <code>error</code>. <code>channel</code> is the channel name where you want to send the Slack notification. <code>message</code> is the error message you want to present to the user (usually defined in the <code>catch</code> statement. <code>error</code> is the system generated error message. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>notifySlackStart()</dt>
+   <dd style="margin: 0 0 1em 0">This method sends a message to Slack in the form of STARTED, and accepts one input. As of this writing it is expecting <code>channel</code>. <code>channel</code> is the channel name where you want to send the Slack notification. If a channel is not specified it should default to the channel configured in the global settings.</dd>
+</dl>
