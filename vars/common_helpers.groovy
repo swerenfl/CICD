@@ -26,15 +26,15 @@ def notifySlackStart(channel, generalMessage = "${GENERAL_MESSAGE}") {
                     DISCORD NOTIFIERS
 ------------------------------------------------------- */
 def notifyDiscordSuccess(channel, generalMessage = "${GENERAL_MESSAGE}") {
-    slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
+    discordSend description: "SUCCESS! ${generalMessage}", footer: '', image: '', link: "${env.BUILD_URL}", result: 'SUCCESS', thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${discordWebURL}"
 }
 
 def notifyDiscordUnstable(channel, generalMessage = "${GENERAL_MESSAGE}") {
-    slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
+    discordSend description: "UNSTABLE! ${generalMessage}", footer: '', image: '', link: "${env.BUILD_URL}", result: 'UNSTABLE', thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${discordWebURL}"
 }
 
 def notifyDiscordFail(channel, message, error, generalMessage = "${GENERAL_MESSAGE}") {
-    slackSend channel: "${channel}", color: '#ff3366', message: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}"
+    discordSend description: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}", footer: '', image: '', link: "${env.BUILD_URL}", result: 'FAILURE', thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${discordWebURL}"
 }
 
 def notifyDiscordStart(discordWebURL, generalMessage = "${GENERAL_MESSAGE}") {

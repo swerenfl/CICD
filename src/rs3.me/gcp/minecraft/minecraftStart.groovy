@@ -30,7 +30,7 @@ node {
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
         common_stages.notifyEmail("${EMAIL_RECP}", "${SLACK_NOTIFY_CHANNEL}")
+        common_stages.notifyDiscord("${DISCORD_WEBHOOK}")
         common_stages.notifySlack("${SLACK_NOTIFY_CHANNEL}")
-        //common_stages.notifyDiscord("${discordWebURL}")
     }
 }

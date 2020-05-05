@@ -87,7 +87,19 @@ def notifySlack(slackNotifyChannel) {
 }
 
 // Notify status of pipeline via Discord
-// INSERT CODE
+def notifyDiscord(discordWebURL) {
+    try {
+        echo "Notify successful completion of the pipeline to Discord"
+        common_helpers.notifyDiscordSuccess("${discordWebURL}")
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Discord, something went wrong. Review logs for further details'
+        echo "${failureMessage}" + ": " + err
+        currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+        throw err
+    }
+}
 
 
 /* -------------------------------------------------------
