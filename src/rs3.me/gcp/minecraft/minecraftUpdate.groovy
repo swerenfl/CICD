@@ -102,7 +102,7 @@ node {
             return
         }
         else {
-            def extraMessage = "Shut the server back offline."
+            def extraMessage = "Shutting the server back down."
             common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
             common_stages.verifyMCSOffline("${G_ZONE}")
             common_helpers.noUpdates("${extraMessage}")
