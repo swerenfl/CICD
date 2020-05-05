@@ -25,4 +25,8 @@
    <dd style="margin: 0 0 1em 0">TODO</dd>
    <dt>startMCS()</dt>
    <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, is the startup sequence to start Minecraft. As of this writing, this method runs through various logic to determine if the instance is online or offline, if the drive is mounted or unmounted, and if the screen (java) is enabled or disabled. The method expects five inputs: <code>gInstance</code>, <code>gZone</code>, <code>gServiceAcct</code>, <code>gProject</code>, and <code>slackNotifyChannel</code>. <code>gInstance</code> is the defined Minecraft instance name in GCP. <code>gZone</code> is the defined zone where the Minecraft instance lives in GCP. <code>gServiceAcct</code> is the defined service account which interacts with the Minecraft instance on GCP. <code>gProject</code> is the defined project name for the Minecraft instance in GCP. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dt>stopMCS()</dt>
+   <dd style="margin: 0 0 1em 0">TODO</dd>
+   <dt>verifyMCSOffline()</dt>
+   <dd style="margin: 0 0 1em 0">TODO</dd>
 </dl>

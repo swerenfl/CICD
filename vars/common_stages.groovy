@@ -187,4 +187,38 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     }
 }
 
+// Stop Minecraft
+def stopMCS(gZone, gProject) {
+    try {
+        def isOffline = mc_helpers.checkUp("${gZone}")
+        if (isOffline == "TERMINATED") {
+            echo "Nothing to do here."
+        }
+        else {
+            mc_helpers.stopMinecraft("${gProject}", "${gZone}")
+        }
+    }
+    catch (err) {
+        def failureMessage = 'While stopping the server something went wrong. Review logs for further details'
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+// Verify Minecraft is offline
+def verifyMCSOffline(gZone) {
+    try {
+        def isOffline = mc_helpers.checkUp("${gZone}")
+        if (isOffline == "TERMINATED") {
+            echo "Your server is indeed terminated."
+        }
+        else {
+            throw new Exception("Your server is not in a TERMINATED state. Check on your server!")
+        }
+    }
+    catch (Exception err) {
+        def failureMessage = "${err}"
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
 return this

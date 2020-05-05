@@ -95,10 +95,20 @@ node {
 
     // If versions match then exit the pipeline
     if (currentBuild.result == 'SUCCESS') {
-        common_stages.notifyEmail("${EMAIL_RECP}")
-        common_stages.notifyDiscord()
-        common_stages.notifySlack()
-        return 
+        if (isOffline == "RUNNING") {
+            common_stages.notifyEmail("${EMAIL_RECP}")
+            common_stages.notifyDiscord()
+            common_stages.notifySlack()
+            return
+        }
+        else {
+            common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
+            common_stages.verifyMCSOffline("${G_ZONE}")
+            common_stages.notifyEmail("${EMAIL_RECP}")
+            common_stages.notifyDiscord()
+            common_stages.notifySlack()
+            return
+        }
     }
 
     // Versions didn't match. Time to prep the intance for upgrade
