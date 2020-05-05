@@ -73,6 +73,7 @@ def notifyEmail(emailRecp, slackNotifyChannel) {
 // Notify status of pipeline via Slack 
 def notifySlack(slackNotifyChannel) {
     try {
+        echo "I'm in the notifySlack method: ${generalMessage}"
         echo "Notify Slack"
         common_helpers.notifySlackSuccess("${slackNotifyChannel}")
     }
