@@ -48,10 +48,10 @@ def startDiscord() {
 /*                 NOTIFY STAGES                   */
 /* =============================================== */ 
 // Notify status of pipeline via email 
-def notifyEmail(emailRecp) {
+def notifyEmail() {
     try {
         echo "Notify successful completion of the pipeline to email"
-        common_helpers.notifyEmailSuccess("${emailRecp}")
+        common_helpers.notifyEmailSuccess()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'

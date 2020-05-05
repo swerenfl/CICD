@@ -97,17 +97,13 @@ node {
     // If versions match then exit the pipeline
     if (currentBuild.result == 'SUCCESS') {
         if (isOffline == "RUNNING") {
-            common_stages.notifyEmail("${EMAIL_RECP}")
-            common_stages.notifyDiscord()
-            common_stages.notifySlack()
+            common_helpers.noUpdates()
             return
         }
         else {
             common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
             common_stages.verifyMCSOffline("${G_ZONE}")
-            common_stages.notifyEmail("${EMAIL_RECP}")
-            common_stages.notifyDiscord()
-            common_stages.notifySlack()
+            common_helpers.noUpdates()
             return
         }
     }

@@ -43,12 +43,13 @@ def notifyDiscordStart(discordWebURL = "${DISCORD_WEBHOOK}", generalMessage = "$
 /* =============================================== */
 /*                 EMAIL NOTIFIERS               */
 /* =============================================== */ 
-def notifyEmailSuccess(emailRecp) {
+def notifyEmailSuccess(emailRecp = "${EMAIL_RECP}") {
     emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
 }
 
-def notifyEmailFailure(emailRecp) {
+def notifyEmailFailure(emailRecp = "${EMAIL_RECP}") {
     emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
+    
 }
 
 
@@ -62,6 +63,16 @@ def catchMe(failureMessage, err, discordWebURL = "${DISCORD_WEBHOOK}", channel =
     notifyDiscordFail("${discordWebURL}", "${failureMessage}", err)
     notifyEmailFailure("${emailRecp}")
     throw err
+}
+
+
+/* =============================================== */
+/*                   NO UPDATES                    */
+/* =============================================== */ 
+def noUpdates(discordWebURL = "${DISCORD_WEBHOOK}", channel = "${SLACK_NOTIFY_CHANNEL}", emailRecp = "${EMAIL_RECP}", generalMessage = "${GENERAL_MESSAGE}") {
+    emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT\n\nNo Updates Conducted. Build passed without issue.', subject: '$DEFAULT_SUBJECT No Updates', to: "${emailRecp}"
+    discordSend description: "NO UPDATES! ${generalMessage}", footer: '', image: '', link: "${env.BUILD_URL}", result: 'ABORTED', thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${discordWebURL}"
+    slackSend channel: "${channel}", color: '#CDCDCD', message: "STARTED! ${generalMessage}"
 }
 
 
