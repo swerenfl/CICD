@@ -17,8 +17,9 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.startSlack("${SLACK_NOTIFY_CHANNEL}")
-        common_stages.preflight("${SLACK_NOTIFY_CHANNEL}")
+        common_stages.startSlack()
+        common_stages.startDiscord()
+        common_stages.preflight()
     }
 
     // Stop Minecraft Stage
@@ -34,10 +35,7 @@ node {
         }
         catch (err) {
             def failureMessage = 'While stopping the server something went wrong. Review logs for further details'
-            echo "${failureMessage}" + ": " + err
-            currentBuild.result = 'FAILURE'
-            common_helpers.notifySlackFail("${SLACK_NOTIFY_CHANNEL}", "${failureMessage}", err)
-            throw err
+            common_helpers.catchMe("${failureMessage}", err)
         }
     }
 
@@ -52,18 +50,16 @@ node {
                 throw new Exception("Your server is not in a TERMINATED state. Check on your server!")
             }
         }
-        catch (Exception e) {
-            def failureMessage = "${e}"
-            echo "${failureMessage}" + ": " + Exception
-            currentBuild.result = 'FAILURE'
-            common_helpers.notifySlackFail("${SLACK_NOTIFY_CHANNEL}", "${failureMessage}", err)
-            throw err
+        catch (Exception err) {
+            def failureMessage = "${err}"
+            common_helpers.catchMe("${failureMessage}", err)
         }
     }
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        common_stages.notifyEmail("${EMAIL_RECP}", "${SLACK_NOTIFY_CHANNEL}")
-        common_stages.notifySlack("${SLACK_NOTIFY_CHANNEL}")
+        common_stages.notifyEmail("${EMAIL_RECP}")
+        common_stages.notifyDiscord()
+        common_stages.notifySlack()
     }
 }

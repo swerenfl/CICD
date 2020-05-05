@@ -55,7 +55,7 @@ def notifyEmailFailure(emailRecp) {
 /* =============================================== */
 /*                 GENERAL CATCH                   */
 /* =============================================== */ 
-def catchMe(failureMessage, discordWebURL = "${DISCORD_WEBHOOK}", channel = "${SLACK_NOTIFY_CHANNEL}", emailRecp = "${EMAIL_RECP}") {
+def catchMe(failureMessage, discordWebURL = "${DISCORD_WEBHOOK}", channel = "${SLACK_NOTIFY_CHANNEL}", emailRecp = "${EMAIL_RECP}", err) {
     echo "${failureMessage}" + ": " + err
     currentBuild.result = 'FAILURE'
     notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
