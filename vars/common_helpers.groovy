@@ -5,19 +5,19 @@
                     SLACK NOTIFIERS
 ------------------------------------------------------- */
 def notifySlackSuccess(channel, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
+    slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
 }
 
 def notifySlackUnstable(channel, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
+    slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
 }
 
 def notifySlackFail(channel, message, error, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#ff3366', message: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}"
+    slackSend channel: "${channel}", color: '#ff3366', message: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}"
 }
 
 def notifySlackStart(channel, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#4a90e2', message: "STARTED! ${generalMessage}"
+    slackSend channel: "${channel}", color: '#4a90e2', message: "STARTED! ${generalMessage}"
 }
 
 
@@ -26,19 +26,20 @@ def notifySlackStart(channel, generalMessage = "${GENERAL_MESSAGE}") {
                     DISCORD NOTIFIERS
 ------------------------------------------------------- */
 def notifyDiscordSuccess(channel, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
+    slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
 }
 
 def notifyDiscordUnstable(channel, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
+    slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
 }
 
 def notifyDiscordFail(channel, message, error, generalMessage = "${GENERAL_MESSAGE}") {
-  slackSend channel: "${channel}", color: '#ff3366', message: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}"
+    slackSend channel: "${channel}", color: '#ff3366', message: "FAILED! Error: ${message} | Reason: ${error} | ${generalMessage}"
 }
 
 def notifyDiscordStart(discordWebURL, generalMessage = "${GENERAL_MESSAGE}") {
-  discordSend description: "STARTED! ${generalMessage}", footer: '', image: '', link: 'https://yahoo.com', result: 'ABORTED', thumbnail: '', title: 'Hello World', webhookURL: 'https://discordapp.com/api/webhooks/707044633816989787/NqD89TdUZmJBSwcKv1PyYMrEiv1uzlglPMxz2tcd43HPZ2PhB595HzGG-Hw6S0dNxbJ2'
+    // Reason for ABORTED: ABORTED just means a grey color in the left hand side
+    discordSend description: "STARTED! ${generalMessage}", link: 'env.BUILD_URL', result: 'ABORTED', title: 'MC - GCP STARTED', webhookURL: "${discordWebURL}"
 }
 
 return this

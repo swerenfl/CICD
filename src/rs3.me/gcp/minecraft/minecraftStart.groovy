@@ -18,7 +18,7 @@ node {
     // Preflight Stage
     stage ('Preflight') {
         common_stages.startSlack("${SLACK_NOTIFY_CHANNEL}")
-        //common_stages.startDiscord("${discordWebURL}")
+        common_stages.startDiscord("${DISCORD_WEBHOOK}")
         common_stages.preflight("${SLACK_NOTIFY_CHANNEL}")
     }
 
