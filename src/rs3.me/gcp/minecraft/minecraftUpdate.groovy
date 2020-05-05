@@ -18,6 +18,7 @@ node {
     def secondURLClean = 'null'
     def latestVersionClean = 'null'
     def installedVersionClean = 'null'
+    def isOffline = 'null'
 
     // Preflight Stage
     stage ('Preflight') {
@@ -29,7 +30,7 @@ node {
     // Is server online or offline?
     stage ('Online Check') {
         try {
-            def isOffline = mc_helpers.checkUp("${G_ZONE}")
+            isOffline = mc_helpers.checkUp("${G_ZONE}")
             if (isOffline == "RUNNING") { // If running, then make sure the drive is mounted
                 def mountProc = mc_helpers.checkMounted("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
                 def mountProcClean = mountProc.trim()
