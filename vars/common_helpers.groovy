@@ -1,7 +1,7 @@
 #!groovy
 
 // Slack Notifiers
-def notifySlackSuccess(channel, generalMessage = "${generalMessage}") {
+def notifySlackSuccess(channel, generalMessage = "${GENERAL_MESSAGE}") {
   echo "I'm in the Slack method: ${generalMessage}"
   slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
 }

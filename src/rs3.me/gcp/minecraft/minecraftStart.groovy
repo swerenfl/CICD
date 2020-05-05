@@ -23,7 +23,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        echo "I'm in the Preflight stage: ${generalMessage}"
+        echo "I'm in the Preflight stage: ${GENERAL_MESSAGE}"
         common_stages.startSlack("${slackNotifyChannel}")
         //common_stages.startDiscord("${discordWebURL}")
         common_stages.preflight("${slackNotifyChannel}")
