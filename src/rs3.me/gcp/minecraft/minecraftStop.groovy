@@ -32,7 +32,7 @@ node {
 
     // Notify users that things have finished
     stage ('Notify') {
-        common_stages.notifyEmail("${EMAIL_RECP}")
+        common_stages.notifyEmail()
         common_stages.notifyDiscord()
         common_stages.notifySlack()
     }
