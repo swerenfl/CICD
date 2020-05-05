@@ -1,6 +1,6 @@
 #!groovy
 
-generalMessage = "Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
+env.generalMessage = "Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 
 // Slack Notifiers
 def notifySlackSuccess(channel, generalMessage = "${generalMessage}") {
