@@ -44,11 +44,11 @@ def notifyDiscordStart(discordWebURL = "${DISCORD_WEBHOOK}", generalMessage = "$
 /*                 EMAIL NOTIFIERS               */
 /* =============================================== */ 
 def notifyEmailSuccess(emailRecp) {
-    emailext replyTo: 'jenkins-no-reply@rs3.me', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
+    emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
 }
 
 def notifyEmailFailure(emailRecp) {
-    emailext replyTo: 'jenkins-no-reply@rs3.me', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
+    emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
 }
 
 
