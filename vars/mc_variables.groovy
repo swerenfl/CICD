@@ -5,6 +5,7 @@
 ------------------------------------------------------- */
 // add something here someday!
 
-def envVariables()
+def envVariables() {
     env.testing = "Hello World"
     env.foo = "bar"
+}
