@@ -49,7 +49,6 @@ def notifyEmailSuccess(emailRecp = "${EMAIL_RECP}") {
 
 def notifyEmailFailure(emailRecp = "${EMAIL_RECP}") {
     emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
-    
 }
 
 
@@ -76,12 +75,12 @@ def noUpdates(extraMessage, discordWebURL = "${DISCORD_WEBHOOK}", channel = "${S
 }
 
 
-/* =============================================== */
-/*                 EXTRA NOTES                     */
-/* =============================================== */ 
-/* GENERAL_MESSAGE, and DISCORD_WEBHOOK is defined */
-/* in Manage Jenkins > Configure System > Global   */
-/* Properties section since GitHub is public.      */
+/* ================================================ */
+/*                    EXTRA NOTES                   */
+/* ================================================ */ 
+/* GENERAL_MESSAGE, DISCORD_WEBHOOK, and EMAIL_RECP */
+/* are defined in Manage Jenkins > Configure System */
+/* > Global Properties section since Git is public. */
 
 return this
 
