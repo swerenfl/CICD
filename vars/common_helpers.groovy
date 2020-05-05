@@ -38,8 +38,7 @@ def notifyDiscordFail(channel, message, error, generalMessage = "${GENERAL_MESSA
 }
 
 def notifyDiscordStart(discordWebURL, generalMessage = "${GENERAL_MESSAGE}") {
-    // Reason for ABORTED: ABORTED just means a grey color in the left hand side
-    discordSend description: "STARTED! ${generalMessage}", link: 'env.BUILD_URL', result: 'ABORTED', title: 'MC - GCP STARTED', webhookURL: "${discordWebURL}"
+    discordSend description: "STARTED! ${generalMessage}", link: 'env.BUILD_URL', result: 'ABORTED', title: 'MC - GCP STARTED', webhookURL: "${discordWebURL}", image: '', footer: '', thumbnail: ''
 }
 
 return this
