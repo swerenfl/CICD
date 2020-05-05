@@ -19,10 +19,13 @@ node {
     def gServiceAcct = 'jenkins'
     def emailRecp = 'richard.staehler@gmail.com'
     def slackNotifyChannel = '#08-gaming'
+    def discordWebURL = 'https://discordapp.com/api/webhooks/707044633816989787/NqD89TdUZmJBSwcKv1PyYMrEiv1uzlglPMxz2tcd43HPZ2PhB595HzGG-Hw6S0dNxbJ2'
+    def generalMessage = "Job Name: ${env.JOB_NAME} | Build Number: ${env.BUILD_NUMBER} | URL: ${env.BUILD_URL}"
 
     // Preflight Stage
     stage ('Preflight') {
         common_stages.startSlack("${slackNotifyChannel}")
+        //common_stages.startDiscord("${discordWebURL}")
         common_stages.preflight("${slackNotifyChannel}")
     }
 
@@ -34,6 +37,7 @@ node {
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
         common_stages.notifyEmail("${emailRecp}", "${slackNotifyChannel}")
-        common_stages.notifySlack("${slackNotifyChannel}")
+        common_stages.notifySlack("${slackNotifyChannel}", "${generalMessage}")
+        //common_stages.notifyDiscord("${discordWebURL}")
     }
 }

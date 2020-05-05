@@ -71,10 +71,10 @@ def notifyEmail(emailRecp, slackNotifyChannel) {
 }
 
 // Notify status of pipeline via Slack 
-def notifySlack(slackNotifyChannel) {
+def notifySlack(slackNotifyChannel, generalMessage) {
     try {
         echo "Notify Slack"
-        common_helpers.notifySlackSuccess("${slackNotifyChannel}")
+        common_helpers.notifySlackSuccess("${slackNotifyChannel}", "${generalMessage}")
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
