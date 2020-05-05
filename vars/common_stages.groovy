@@ -4,17 +4,14 @@
                     PREFLIGHT STAGES
 ------------------------------------------------------- */
 // Preflight
-def preflight(slackNotifyChannel) {
+def preflight() {
     try {
         echo "Set limit to Discard old builds. Keep last 10 builds. Further, disallow concurrent builds."
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')), disableConcurrentBuilds()])
     }
     catch (err) {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
@@ -23,32 +20,26 @@ def preflight(slackNotifyChannel) {
                     START STAGES
 ------------------------------------------------------- */
 // Start via Slack
-def startSlack(slackNotifyChannel) {
+def startSlack() {
     try {
         echo "Notify Slack that the build is starting"
-        common_helpers.notifySlackStart("${slackNotifyChannel}")
+        common_helpers.notifySlackStart()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack at the start of the build, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
 // Start via Discord
-def startDiscord(discordWebURL) {
+def startDiscord() {
     try {
         echo "Notify Discord that the build is starting"
-        common_helpers.notifyDiscordStart("${discordWebURL}")
+        common_helpers.notifyDiscordStart()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord at the start of the build, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
@@ -57,47 +48,38 @@ def startDiscord(discordWebURL) {
                     NOTIFY STAGES
 ------------------------------------------------------- */
 // Notify status of pipeline via email 
-def notifyEmail(emailRecp, slackNotifyChannel) {
+def notifyEmail(emailRecp) {
     try {
         echo "Notify successful completion of the pipeline to email"
         emailext attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
     }
     catch (err) {
         def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
 // Notify status of pipeline via Slack 
-def notifySlack(slackNotifyChannel) {
+def notifySlack() {
     try {
         echo "Notify successful completion of the pipeline to Slack"
-        common_helpers.notifySlackSuccess("${slackNotifyChannel}")
+        common_helpers.notifySlackSuccess()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
 // Notify status of pipeline via Discord
-def notifyDiscord(discordWebURL) {
+def notifyDiscord() {
     try {
         echo "Notify successful completion of the pipeline to Discord"
-        common_helpers.notifyDiscordSuccess("${discordWebURL}")
+        common_helpers.notifyDiscordSuccess()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 
@@ -106,7 +88,7 @@ def notifyDiscord(discordWebURL) {
                     GENERAL STAGES
 ------------------------------------------------------- */
 // Start Minecraft
-def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
+def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     try {
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
@@ -201,10 +183,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     }
     catch (err) {
         def failureMessage = 'While connecting and starting, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe(failureMessage)
     }
 }
 

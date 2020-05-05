@@ -17,20 +17,20 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.startSlack("${SLACK_NOTIFY_CHANNEL}")
-        common_stages.startDiscord("${DISCORD_WEBHOOK}")
-        common_stages.preflight("${SLACK_NOTIFY_CHANNEL}")
+        common_stages.startSlack()
+        common_stages.startDiscord()
+        common_stages.preflight()
     }
 
     // Start Minecraft Stage
     stage ('Start Minecraft') {
-        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "${SLACK_NOTIFY_CHANNEL}")
+        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
     }
 
     // Notify users of the build using the emailext plugin.
     stage ('Notify') {
-        common_stages.notifyEmail("${EMAIL_RECP}", "${SLACK_NOTIFY_CHANNEL}")
-        common_stages.notifyDiscord("${DISCORD_WEBHOOK}")
-        common_stages.notifySlack("${SLACK_NOTIFY_CHANNEL}")
+        common_stages.notifyEmail("${EMAIL_RECP}")
+        common_stages.notifyDiscord()
+        common_stages.notifySlack()
     }
 }
