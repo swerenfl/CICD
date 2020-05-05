@@ -25,7 +25,7 @@ def preflight(slackNotifyChannel) {
 // Start via Slack
 def startSlack(slackNotifyChannel) {
     try {
-        echo "Notify Slack"
+        echo "Notify Slack that the build is starting"
         common_helpers.notifySlackStart("${slackNotifyChannel}")
     }
     catch (err) {
@@ -38,8 +38,19 @@ def startSlack(slackNotifyChannel) {
 }
 
 // Start via Discord
-// INSERT CODE
-
+def startDiscord(discordWebURL) {
+    try {
+        echo "Notify Discord that the build is starting"
+        common_helpers.notifyDiscordStart("${discordWebURL}")
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Discord at the start of the build, something went wrong. Review logs for further details'
+        echo "${failureMessage}" + ": " + err
+        currentBuild.result = 'FAILURE'
+        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
+        throw err
+    }
+}
 
 /* -------------------------------------------------------
                     NOTIFY STAGES
