@@ -1,6 +1,9 @@
 #!groovy
 
-// preflight stage -- common across pipelines
+/* -------------------------------------------------------
+                    PREFLIGHT STAGES
+------------------------------------------------------- */
+// Preflight
 def preflight(slackNotifyChannel) {
     try {
         echo "Set limit to Discard old builds. Keep last 10 builds. Further, disallow concurrent builds."
@@ -15,7 +18,11 @@ def preflight(slackNotifyChannel) {
     }
 }
 
-// start stage -- Slack -- common across pipelines
+
+/* -------------------------------------------------------
+                    START STAGES
+------------------------------------------------------- */
+// Start via Slack
 def startSlack(slackNotifyChannel) {
     try {
         echo "Notify Slack"
@@ -30,7 +37,14 @@ def startSlack(slackNotifyChannel) {
     }
 }
 
-// notify stage -- common across pipelines
+// Start via Discord
+// INSERT CODE
+
+
+/* -------------------------------------------------------
+                    NOTIFY STAGES
+------------------------------------------------------- */
+// Notify status of pipeline via email 
 def notifyEmail(emailRecp, slackNotifyChannel) {
     try {
         echo "Send email"
@@ -45,7 +59,7 @@ def notifyEmail(emailRecp, slackNotifyChannel) {
     }
 }
 
-// notify stage -- Slack -- common across pipelines
+// Notify status of pipeline via Slack 
 def notifySlack(slackNotifyChannel) {
     try {
         echo "Notify Slack"
@@ -60,7 +74,14 @@ def notifySlack(slackNotifyChannel) {
     }
 }
 
-// start minecraft -- common, needs 5 inputs.
+// Notify status of pipeline via Discord
+// INSERT CODE
+
+
+/* -------------------------------------------------------
+                    GENERAL STAGES
+------------------------------------------------------- */
+// Start Minecraft
 def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     try {
         // Assign a variable to whatever the status of the compute instance is
