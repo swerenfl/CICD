@@ -70,7 +70,7 @@ def catchMe(failureMessage, err, discordWebURL = "${DISCORD_WEBHOOK}", channel =
 /*                   NO UPDATES                    */
 /* =============================================== */ 
 def noUpdates(extraMessage, discordWebURL = "${DISCORD_WEBHOOK}", channel = "${SLACK_NOTIFY_CHANNEL}", emailRecp = "${EMAIL_RECP}", generalMessage = "${GENERAL_MESSAGE}") {
-    emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: "${DEFAULT_CONTENT}\n\nNo Updates Conducted. Build passed without issue. ${extraMessage}", subject: '$DEFAULT_SUBJECT No Updates', to: "${emailRecp}"
+    emailext replyTo: '$DEFAULT_REPLYTO', attachLog: true, body: "\$DEFAULT_CONTENT\n\nNo Updates Conducted. Build passed without issue. ${extraMessage}", subject: '$DEFAULT_SUBJECT No Updates', to: "${emailRecp}"
     discordSend description: "NO UPDATES! ${extraMessage} ${generalMessage}", footer: '', image: '', link: "${env.BUILD_URL}", result: 'ABORTED', thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${discordWebURL}"
     slackSend channel: "${channel}", color: '#CDCDCD', message: "NO UPDATES! ${extraMessage} ${generalMessage}"
 }
