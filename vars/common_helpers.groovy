@@ -38,7 +38,7 @@ def notifyDiscordFail(channel, message, error, generalMessage = "${GENERAL_MESSA
 }
 
 def notifyDiscordStart(discordWebURL, generalMessage = "${GENERAL_MESSAGE}") {
-    discordSend description: "STARTED! ${generalMessage}", link: 'env.BUILD_URL', result: 'ABORTED', title: 'MC - GCP STARTED', webhookURL: "${discordWebURL}", image: '', footer: '', thumbnail: ''
+    discordSend description: "STARTED! ${generalMessage}", footer: '', image: '', link: 'https://yahoo.com', result: 'ABORTED', thumbnail: '', title: 'STARTED GCP - MC', webhookURL: "${discordWebURL}"
 }
 
 return this
