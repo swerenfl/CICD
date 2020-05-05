@@ -1,12 +1,10 @@
 #!groovy
 
-/* ===============================================
+/* =============================================== */
+/*                    PIPELINE                     */
+/* =============================================== */ 
 
-                    PIPELINE
-
-=============================================== */
-
-// Load library
+// Load Library
 @Library('CICD')_
 
 // Start Pipeline
@@ -27,7 +25,7 @@ node {
         common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
     }
 
-    // Notify users of the build using the emailext plugin.
+    // Notify users that things have finished
     stage ('Notify') {
         common_stages.notifyEmail("${EMAIL_RECP}")
         common_stages.notifyDiscord()

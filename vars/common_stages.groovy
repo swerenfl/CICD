@@ -1,8 +1,8 @@
 #!groovy
 
-/* -------------------------------------------------------
-                    PREFLIGHT STAGES
-------------------------------------------------------- */
+/* =============================================== */
+/*                PREFLIGHT STAGES                 */
+/* =============================================== */ 
 // Preflight
 def preflight() {
     try {
@@ -11,14 +11,14 @@ def preflight() {
     }
     catch (err) {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
 
-/* -------------------------------------------------------
-                    START STAGES
-------------------------------------------------------- */
+/* =============================================== */
+/*                  START STAGES                   */
+/* =============================================== */ 
 // Start via Slack
 def startSlack() {
     try {
@@ -27,7 +27,7 @@ def startSlack() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack at the start of the build, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
@@ -39,23 +39,23 @@ def startDiscord() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord at the start of the build, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
 
-/* -------------------------------------------------------
-                    NOTIFY STAGES
-------------------------------------------------------- */
+/* =============================================== */
+/*                 NOTIFY STAGES                   */
+/* =============================================== */ 
 // Notify status of pipeline via email 
 def notifyEmail(emailRecp) {
     try {
         echo "Notify successful completion of the pipeline to email"
-        emailext attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
+        common_helpers.notifyEmailSuccess("${emailRecp}")
     }
     catch (err) {
         def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
@@ -67,7 +67,7 @@ def notifySlack() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
@@ -79,14 +79,14 @@ def notifyDiscord() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
 
-/* -------------------------------------------------------
-                    GENERAL STAGES
-------------------------------------------------------- */
+/* =============================================== */
+/*                GENERAL STAGES                   */
+/* =============================================== */ 
 // Start Minecraft
 def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     try {
@@ -183,7 +183,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     }
     catch (err) {
         def failureMessage = 'While connecting and starting, something went wrong. Review logs for further details'
-        common_helpers.catchMe(failureMessage)
+        common_helpers.catchMe("${failureMessage}")
     }
 }
 
