@@ -68,7 +68,7 @@ def versionCk(gInstance, gZone, gServiceAcct, gProject) {
 def checkUp(gZone) {
     def checkStatus = sh returnStdout: true, script: """gcloud compute instances list --filter=${gZone} --format='value(status.scope())' """
     def upCheck = checkStatus.trim()
-    echo "The value retrieved is: ${upCheck}"
+    echo "The value retrieved from checkUp method is: ${upCheck}"
     return upCheck
 }
 

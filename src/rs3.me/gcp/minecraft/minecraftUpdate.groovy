@@ -97,12 +97,12 @@ node {
     // If versions match then exit the pipeline
     if (currentBuild.result == 'SUCCESS') {
         if (isOffline == "RUNNING") {
-            def extraMessage = "Leaving the server online."
+            def extraMessage = "Since the server was online when the update process started, the server was left on."
             common_helpers.noUpdates("${extraMessage}")
             return
         }
         else {
-            def extraMessage = "Shutting the server back down."
+            def extraMessage = "Since the server was offline when the update process started, the server was shut off."
             common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
             common_stages.verifyMCSOffline("${G_ZONE}")
             common_helpers.noUpdates("${extraMessage}")
