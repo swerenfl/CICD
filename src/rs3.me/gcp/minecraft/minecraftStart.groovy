@@ -13,17 +13,22 @@
 node {
 
     // Set Build Variables
-    def gProject = 'mc-server'
-    def gInstance = 'minecraft-project-2019-11-03'
-    def gZone = 'us-central1-f'
-    def gServiceAcct = 'jenkins'
-    def emailRecp = 'richard.staehler@gmail.com'
-    def slackNotifyChannel = '#08-gaming'
-    def discordWebURL = 'https://discordapp.com/api/webhooks/707044633816989787/NqD89TdUZmJBSwcKv1PyYMrEiv1uzlglPMxz2tcd43HPZ2PhB595HzGG-Hw6S0dNxbJ2'
+    def gProject = "mc-server"
+    def gInstance = "minecraft-project-2019-11-03"
+    def gZone = "us-central1-f"
+    def gServiceAcct = "jenkins"
+    def emailRecp = "${EMAIL_RECP}" // masking since GitHub is public.
+    def slackNotifyChannel = "#08-gaming"
+    def discordWebURL = "https://discordapp.com/api/webhooks/707044633816989787/NqD89TdUZmJBSwcKv1PyYMrEiv1uzlglPMxz2tcd43HPZ2PhB595HzGG-Hw6S0dNxbJ2"
+
+    // More Variables
+    mc_variables.envVariables()
 
     // Preflight Stage
     stage ('Preflight') {
-        echo "I'm in the Preflight stage: ${GENERAL_MESSAGE}"
+        echo sh(script: 'env|sort', returnStdout: true)
+        sh 'sleep 120'
+
         common_stages.startSlack("${slackNotifyChannel}")
         //common_stages.startDiscord("${discordWebURL}")
         common_stages.preflight("${slackNotifyChannel}")

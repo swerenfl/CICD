@@ -58,7 +58,7 @@ def startDiscord(discordWebURL) {
 // Notify status of pipeline via email 
 def notifyEmail(emailRecp, slackNotifyChannel) {
     try {
-        echo "Send email"
+        echo "Notify successful completion of the pipeline to email"
         emailext attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
     }
     catch (err) {
@@ -73,8 +73,7 @@ def notifyEmail(emailRecp, slackNotifyChannel) {
 // Notify status of pipeline via Slack 
 def notifySlack(slackNotifyChannel) {
     try {
-        echo "I'm in the notifySlack method: ${GENERAL_MESSAGE}"
-        echo "Notify Slack"
+        echo "Notify successful completion of the pipeline to Slack"
         common_helpers.notifySlackSuccess("${slackNotifyChannel}")
     }
     catch (err) {
