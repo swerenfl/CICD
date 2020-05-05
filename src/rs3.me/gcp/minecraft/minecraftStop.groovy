@@ -1,10 +1,8 @@
 #!groovy
 
-/* ===============================================
-
-                    PIPELINE
-
-=============================================== */
+/* =============================================== */
+/*                    PIPELINE                     */
+/* =============================================== */ 
 
 // Load library
 @Library('CICD')_
@@ -56,7 +54,7 @@ node {
         }
     }
 
-    // Notify users of the build using the emailext plugin.
+    // Notify users that things have finished
     stage ('Notify') {
         common_stages.notifyEmail("${EMAIL_RECP}")
         common_stages.notifyDiscord()

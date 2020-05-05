@@ -11,7 +11,7 @@ def preflight() {
     }
     catch (err) {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -27,7 +27,7 @@ def startSlack() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack at the start of the build, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -39,7 +39,7 @@ def startDiscord() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord at the start of the build, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -55,7 +55,7 @@ def notifyEmail(emailRecp) {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -67,7 +67,7 @@ def notifySlack() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -79,7 +79,7 @@ def notifyDiscord() {
     }
     catch (err) {
         def failureMessage = 'While trying to notify Discord, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
@@ -183,7 +183,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     }
     catch (err) {
         def failureMessage = 'While connecting and starting, something went wrong. Review logs for further details'
-        common_helpers.catchMe("${failureMessage}")
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
