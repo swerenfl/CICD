@@ -1,67 +1,94 @@
 #!groovy
 
-// preflight stage -- common across pipelines
-def preflight(slackNotifyChannel) {
+/* =============================================== */
+/*                PREFLIGHT STAGES                 */
+/* =============================================== */ 
+// Preflight
+def preflight() {
     try {
         echo "Set limit to Discard old builds. Keep last 10 builds. Further, disallow concurrent builds."
         properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')), disableConcurrentBuilds()])
     }
     catch (err) {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
-// start stage -- Slack -- common across pipelines
-def startSlack(slackNotifyChannel) {
+
+/* =============================================== */
+/*                  START STAGES                   */
+/* =============================================== */ 
+// Start via Slack
+def startSlack() {
     try {
-        echo "Notify Slack"
-        common_helpers.notifySlackStart("${slackNotifyChannel}")
+        echo "Notify Slack that the build is starting"
+        common_helpers.notifySlackStart()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack at the start of the build, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
-// notify stage -- common across pipelines
-def notifyEmail(emailRecp, slackNotifyChannel) {
+// Start via Discord
+def startDiscord() {
     try {
-        echo "Send email"
-        emailext attachLog: true, body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: "${emailRecp}"
+        echo "Notify Discord that the build is starting"
+        common_helpers.notifyDiscordStart()
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Discord at the start of the build, something went wrong. Review logs for further details'
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+
+/* =============================================== */
+/*                 NOTIFY STAGES                   */
+/* =============================================== */ 
+// Notify status of pipeline via email 
+def notifyEmail() {
+    try {
+        echo "Notify successful completion of the pipeline to email"
+        common_helpers.notifyEmailSuccess()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Email, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
-// notify stage -- Slack -- common across pipelines
-def notifySlack(slackNotifyChannel) {
+// Notify status of pipeline via Slack 
+def notifySlack() {
     try {
-        echo "Notify Slack"
-        common_helpers.notifySlackSuccess("${slackNotifyChannel}")
+        echo "Notify successful completion of the pipeline to Slack"
+        common_helpers.notifySlackSuccess()
     }
     catch (err) {
         def failureMessage = 'While trying to notify Slack, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 
-// start minecraft -- common, needs 5 inputs.
-def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
+// Notify status of pipeline via Discord
+def notifyDiscord() {
+    try {
+        echo "Notify successful completion of the pipeline to Discord"
+        common_helpers.notifyDiscordSuccess()
+    }
+    catch (err) {
+        def failureMessage = 'While trying to notify Discord, something went wrong. Review logs for further details'
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+
+/* =============================================== */
+/*                GENERAL STAGES                   */
+/* =============================================== */ 
+// Start Minecraft
+def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     try {
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
@@ -156,10 +183,41 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, slackNotifyChannel) {
     }
     catch (err) {
         def failureMessage = 'While connecting and starting, something went wrong. Review logs for further details'
-        echo "${failureMessage}" + ": " + err
-        currentBuild.result = 'FAILURE'
-        common_helpers.notifySlackFail("${slackNotifyChannel}", "${failureMessage}", err)
-        throw err
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+// Stop Minecraft
+def stopMCS(gZone, gProject) {
+    try {
+        def isOffline = mc_helpers.checkUp("${gZone}")
+        if (isOffline == "TERMINATED") {
+            echo "Nothing to do here."
+        }
+        else {
+            mc_helpers.stopMinecraft("${gProject}", "${gZone}")
+        }
+    }
+    catch (err) {
+        def failureMessage = 'While stopping the server something went wrong. Review logs for further details'
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+// Verify Minecraft is offline
+def verifyMCSOffline(gZone) {
+    try {
+        def isOffline = mc_helpers.checkUp("${gZone}")
+        if (isOffline == "TERMINATED") {
+            echo "Your server is indeed terminated."
+        }
+        else {
+            throw new Exception("Your server is not in a TERMINATED state. Check on your server!")
+        }
+    }
+    catch (Exception err) {
+        def failureMessage = "${err}"
+        common_helpers.catchMe("${failureMessage}", err)
     }
 }
 

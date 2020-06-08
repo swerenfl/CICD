@@ -1,39 +1,35 @@
 #!groovy
 
-/* ===============================================
+/* =============================================== */
+/*                    PIPELINE                     */
+/* =============================================== */ 
 
-                    PIPELINE
-
-=============================================== */
-
-// Load library
+// Load Library
 @Library('CICD')_
 
 // Start Pipeline
 node {
 
-    // Set Build Variables
-    def gProject = 'mc-server'
-    def gInstance = 'minecraft-project-2019-11-03'
-    def gZone = 'us-central1-f'
-    def gServiceAcct = 'jenkins'
-    def emailRecp = 'richard.staehler@gmail.com'
-    def slackNotifyChannel = '#08-gaming'
+    // Load Env Variables
+    mc_variables.envVariables()
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.startSlack("${slackNotifyChannel}")
-        common_stages.preflight("${slackNotifyChannel}")
+        common_stages.startSlack()
+        common_stages.startDiscord()
+        common_stages.preflight()
     }
 
     // Start Minecraft Stage
     stage ('Start Minecraft') {
-        common_stages.startMCS("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${slackNotifyChannel}")
+        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
     }
 
-    // Notify users of the build using the emailext plugin.
+    // Notify users that things have finished
     stage ('Notify') {
-        common_stages.notifyEmail("${emailRecp}", "${slackNotifyChannel}")
-        common_stages.notifySlack("${slackNotifyChannel}")
+        common_stages.notifyEmail()
+        common_stages.notifyDiscord()
+        common_stages.notifySlack()
+        build job: 'Minecraft_CHECK', wait: false
     }
 }
