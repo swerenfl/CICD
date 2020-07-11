@@ -81,7 +81,7 @@ node {
             }
 
             // Parse the URL associated with the latest version
-            firstURLClean = sh(returnStdout: true, script: """curl -sSL '${MC_MANIFEST_URL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'""").trim
+            firstURLClean = sh(returnStdout: true, script: """curl -sSL '${MC_MANIFEST_URL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'""").trim()
             echo "The current URL for the latest version is: ${firstURLClean}."
 
             // Obtain the download link from the URL
