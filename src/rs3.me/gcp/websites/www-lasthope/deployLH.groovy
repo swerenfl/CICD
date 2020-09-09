@@ -19,10 +19,10 @@ node {
     stage ('Checkout') {
         git credentialsId: '46384ba0-4e05-4e9b-aa38-97b82212c811', url: 'https://github.com/swerenfl/www-lasthope'
     }
-    
+
     // Deploy LH to the bucket
     stage ('Deploy') {
-        googleStorageUpload bucket: 'gs://lasthopeguild.com', credentialsId: 'lasthope-www-2020-09-08', pattern: '**/', sharedPublicly: true
+        googleStorageUpload bucket: 'gs://lasthopeguild.com', credentialsId: 'lasthope-www-2020-09-08', pattern: '**/', sharedPublicly: true, showInline: true
     }
 
     // Notify users that things have finished
