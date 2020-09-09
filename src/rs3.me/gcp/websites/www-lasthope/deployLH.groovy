@@ -22,7 +22,6 @@ node {
 
     // Deploy LH to the bucket (delete then load)
     stage ('Deploy') {
-        sh "gsutil rm gs://lasthopeguild.com/**"
         googleStorageUpload bucket: 'gs://lasthopeguild.com', credentialsId: 'lasthope-www-2020-09-08', pattern: '**/', sharedPublicly: true, showInline: true
     }
 
