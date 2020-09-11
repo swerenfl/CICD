@@ -225,7 +225,7 @@ def verifyMCSOffline(gZone) {
 /* =============================================== */
 /*                   WWW STAGES                    */
 /* =============================================== */
-def wwwDeployStage(gcKey, gBucketURL)
+def wwwDeployStage(gcKey, gBucketURL) {
     try {
         www_helpers.wwwDeploy("${gcKey}", "${gBucketURL}")
     }
@@ -233,5 +233,6 @@ def wwwDeployStage(gcKey, gBucketURL)
         def failureMessage = "While deploying code to ${gBucketURL} something went wrong. Review logs for further details"
         common_helpers.catchMe("${failureMessage}", err)
     }
+}
 
 return this
