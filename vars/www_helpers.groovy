@@ -4,11 +4,15 @@
 def wwwDeploy(gcKey, gBucketURL) {
     sh """
         gcloud auth activate-service-account --key-file=${gcKey}
-        gsutil -m rsync -x '.git' -r ${WORKSPACE} ${gBucketURL}
+        gsutil -h "Cache-Control:no-cache,max-age=0" \
+            -m rsync -x '.git' -r ${WORKSPACE} ${gBucketURL}
         gsutil acl ch -u AllUsers:R ${gBucketURL}
-        gsutil setmeta -h "Content-Type:text/html" \
-            -h "Cache-Control:private, max-age=0, no-transform" ${gBucketURL}/*.html
     """
 }
+//Cache-Control:no-cache,max-age=0
 //        gsutil -m rm ${gBucketURL}/**
 return this
+
+//gsutil -h "Cache-Control:public,max-age=3600" cp -a public-read \
+//       -r photos gs://bucket/photos
+//        //gsutil -m rsync -x '.git' -r ${WORKSPACE} ${gBucketURL}
