@@ -15,6 +15,20 @@ def preflight() {
     }
 }
 
+// Activate Service Account
+def actSA(gKey) {
+    try {
+        echo "Activating Service Account"
+        withCredentials([file(credentialsId: "${gKey}", variable: 'GC_KEY')]) {
+            sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+        }
+    }
+    catch (err) {
+        def failureMessage = 'Could not activate service account. Review logs for further details'
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
 
 /* =============================================== */
 /*                  START STAGES                   */
@@ -225,9 +239,9 @@ def verifyMCSOffline(gZone) {
 /* =============================================== */
 /*                   WWW STAGES                    */
 /* =============================================== */
-def wwwDeployStage(gcKey, gBucketURL) {
+def wwwDeployStage(gBucketURL) {
     try {
-        www_helpers.wwwDeploy("${gcKey}", "${gBucketURL}")
+        www_helpers.wwwDeploy("${gBucketURL}")
     }
     catch (err) {
         def failureMessage = "While deploying code to ${gBucketURL} something went wrong. Review logs for further details"

@@ -17,7 +17,7 @@ node {
     stage ('Preflight') {
         common_stages.startSlack()
         common_stages.startDiscord()
-        common_stages.preflight()
+        common_stages.actSA("${G_KEY}")
     }
 
     // Start Minecraft Stage

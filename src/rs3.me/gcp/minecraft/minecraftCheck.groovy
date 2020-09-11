@@ -13,8 +13,10 @@ node {
     // Load Env Variables
     common_variables.envVariables()
 
+    // Preflight Stage
     stage ('Preflight') {
         common_stages.preflight()
+        common_stages.actSA("${G_KEY}")
     }
 
     // Check Status and Return
