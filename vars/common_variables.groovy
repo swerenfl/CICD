@@ -16,6 +16,6 @@ def envVariables() {
 
 def lhVariables() {
     env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER | URL: $BUILD_URL"
-    env.SLACK_NOTIFY_CHANNEL = "#08-gaming"
+    env.SLACK_NOTIFY_CHANNEL = "#09-websites"
     env.G_BUCKET_URL = "gs://lasthopeguild.com"
 }
