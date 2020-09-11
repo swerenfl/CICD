@@ -22,7 +22,11 @@ node {
 
     // Deploy LH to the bucket (delete then load)
     stage ('Deploy') {
-        googleStorageUpload bucket: 'gs://lasthopeguild.com', credentialsId: 'lasthope-www-2020-09-08', pattern: '**/', sharedPublicly: true, showInline: true
+        withCredentials([file(credentialsId: '11a6106f-2563-461f-8f47-58c722f26025', variable: 'GC_KEY')]) {
+            sh("gcloud auth activate-service-account --key-file=${GC_KEY}")
+            sh("gsutil rm gs://lasthopeguild.com/**")
+            sh("gsutil -m rsync -x '.git' -r \${WORKSPACE} gs://lasthopeguild.com")
+        }
     }
 
     // Notify users that things have finished
