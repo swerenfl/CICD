@@ -33,5 +33,6 @@ node {
     // Notify users that things have finished
     stage ('Notify') {
         common_stages.notifyEmail()
+        common_stages.notifySlack()
     }
 }
