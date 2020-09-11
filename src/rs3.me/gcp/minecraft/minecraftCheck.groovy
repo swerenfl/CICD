@@ -11,7 +11,7 @@
 node {
 
     // Load Env Variables
-    mc_variables.envVariables()
+    common_variables.envVariables()
 
     stage ('Preflight') {
         common_stages.preflight()
