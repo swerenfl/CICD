@@ -15,10 +15,23 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.startSlack()
-        common_stages.startDiscord()
-        common_stages.preflight()
-        common_stages.actSA("${G_KEY}")
+        def isOffline = mc_helpers.checkUp("${G_ZONE}")
+        if (isOffline == "TERMINATED") {
+            currentBuild.result = 'SUCCESS'
+            return
+        }
+        else {
+            common_stages.startSlack()
+            common_stages.startDiscord()
+            common_stages.preflight()
+            common_stages.actSA("${G_KEY}")
+        }
+    }
+
+    // Break pipeline if instance is already shut down
+    if (currentBuild.result == 'SUCCESS') {
+        echo "The instance is already shut down. No action."
+        return
     }
 
     // Stop Minecraft Stage
