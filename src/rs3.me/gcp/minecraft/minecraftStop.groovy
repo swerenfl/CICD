@@ -15,7 +15,8 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        def isOffline = mc_helpers.checkUp("${G_ZONE}")
+        common_stages.actSA("${G_KEY}")
+        isOffline = mc_helpers.checkUp("${G_ZONE}")
         if (isOffline == "TERMINATED") {
             currentBuild.result = 'SUCCESS'
             return
@@ -24,7 +25,6 @@ node {
             common_stages.startSlack()
             common_stages.startDiscord()
             common_stages.preflight()
-            common_stages.actSA("${G_KEY}")
         }
     }
 
