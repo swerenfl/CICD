@@ -15,7 +15,7 @@ This repo contains Jenkins pipelines, written in Groovy, to deploy or standup va
 
 ### Layout of Repo ###
 
-As of this writing the repo contains three folders which best described [here](https://www.jenkins.io/doc/book/pipeline/shared-libraries/#directory-structure).
+As of this writing the repo contains three folders defined by Jenkins best practices described [here](https://www.jenkins.io/doc/book/pipeline/shared-libraries/#directory-structure).
 + resources
     * A resources directory allows the libraryResource step to be used from an external library to load associated non-Groovy files. As of this writing, there are no files in this directory.
 + src
