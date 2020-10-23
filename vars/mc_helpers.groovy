@@ -31,7 +31,7 @@ def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms1G -Xmx3G -d64 -jar server.jar nogui'
+        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms2G -Xmx6G -d64 -jar server.jar nogui'
     """
 }
 
