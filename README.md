@@ -43,7 +43,7 @@ As of this writing the repo contains three folders defined by Jenkins best pract
         * The STOP pipeline stops the instance if you want kill it before it gets to its preemptive timer.
         * The UPDATE pipeline will check for the latest version of Minecraft and update if necessary. There is checks that if the instance is offline to start it first.
         * The STATUS pipeline just shows status
-    * These can all be triggered from Slack/Jenkins depending on how you have your Jenkins job configuration setup
+    * These can all be triggered from Slack/Discord depending on how you have your Jenkins job configuration setup
 2. Website(s)
     * As of this writing, only [Last Hope Guild](https://lasthopeguild.com) is up and running. It is recommended to follow this [tutorial](https://cloud.google.com/storage/docs/hosting-static-website).
     * Going through this, you'll come across the problem of how in the world do you deploy your changes.
