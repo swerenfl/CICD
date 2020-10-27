@@ -239,12 +239,24 @@ def verifyMCSOffline(gZone) {
 /* =============================================== */
 /*                   WWW STAGES                    */
 /* =============================================== */
+// Deploy with a GCS Bucket setup
 def wwwDeployStage(gBucketURL) {
     try {
         www_helpers.wwwDeploy("${gBucketURL}")
     }
     catch (err) {
         def failureMessage = "While deploying code to ${gBucketURL} something went wrong. Review logs for further details"
+        common_helpers.catchMe("${failureMessage}", err)
+    }
+}
+
+// Deploy with a Firebase setup
+def wwwFBDeployStage(fbCredentials) {
+    try {
+        www_helpers.fbDeploy("${fbCredentials}")
+    }
+    catch (err) {
+        def failureMessage = "While deploying code to Firebase something went wrong. Review logs for further details"
         common_helpers.catchMe("${failureMessage}", err)
     }
 }
