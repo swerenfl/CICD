@@ -257,7 +257,7 @@ def wwwFBDeployStage(fbCredentials) {
     }
     catch (err) {
         def failureMessage = "While deploying code to Firebase something went wrong. Review logs for further details"
-        common_helpers.catchMe("${failureMessage}", err)
+        common_helpers.catchMeNoDiscord("${failureMessage}", err)
     }
 }
 

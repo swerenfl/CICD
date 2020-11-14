@@ -64,6 +64,27 @@ def catchMe(failureMessage, err, discordWebURL = "${DISCORD_WEBHOOK}", channel =
     throw err
 }
 
+/* =============================================== */
+/*            GENERAL CATCH NO DISCORD             */
+/* =============================================== */ 
+def catchMeNoDiscord(failureMessage, err, channel = "${SLACK_NOTIFY_CHANNEL}", emailRecp = "${EMAIL_RECP}") {
+    echo "${failureMessage}" + ": " + err
+    currentBuild.result = 'FAILURE'
+    notifySlackFail("${channel}", "${failureMessage}", err)
+    notifyEmailFailure("${emailRecp}")
+    throw err
+}
+
+/* =============================================== */
+/*     GENERAL CATCH NO SLACK AND NO DISCORD       */
+/* =============================================== */ 
+def catchMeNoDisOrSlack(failureMessage, err, emailRecp = "${EMAIL_RECP}") {
+    echo "${failureMessage}" + ": " + err
+    currentBuild.result = 'FAILURE'
+    notifyEmailFailure("${emailRecp}")
+    throw err
+}
+
 
 /* =============================================== */
 /*                   NO UPDATES                    */
