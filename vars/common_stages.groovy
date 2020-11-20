@@ -19,7 +19,7 @@ def preflight() {
 def actSA(gKey) {
     try {
         echo "Activating Service Account"
-        withCredentials([file(credentialsId: 'gKey', variable: 'GC_KEY')]) {
+        withCredentials([file(credentialsId: $gKey, variable: 'GC_KEY')]) {
             sh "gcloud auth activate-service-account --key-file=$GC_KEY"
         }
     }
