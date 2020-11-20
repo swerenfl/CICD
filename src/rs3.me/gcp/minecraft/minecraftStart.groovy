@@ -17,7 +17,7 @@ node {
     stage ('Preflight') {
         common_stages.startSlack()
         common_stages.startDiscord()
-        common_stages.actSA("${G_KEY}")
+        common_stages.actSA("${G_KEY}", "${G_INSTANCE}")
     }
 
     // Start Minecraft Stage
@@ -30,6 +30,6 @@ node {
         common_stages.notifyEmail()
         common_stages.notifyDiscord()
         common_stages.notifySlack()
-        build job: 'Minecraft_CHECK', wait: false
+        build job: 'Minecraft_STATUS', wait: false
     }
 }

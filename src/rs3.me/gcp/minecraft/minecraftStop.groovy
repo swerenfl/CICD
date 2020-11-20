@@ -15,7 +15,7 @@ node {
 
     // Preflight Stage
     stage ('Preflight') {
-        common_stages.actSA("${G_KEY}")
+        common_stages.actSA("${G_KEY}", "${G_INSTANCE}")
         isOffline = mc_helpers.checkUp("${G_ZONE}")
         if (isOffline == "TERMINATED") {
             currentBuild.result = 'SUCCESS'
