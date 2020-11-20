@@ -20,7 +20,7 @@ node {
 
     // Checkout RS3 Repo
     stage ('Checkout') {
-        git branch: 'main', credentialsId: '46384ba0-4e05-4e9b-aa38-97b82212c811', url: 'https://github.com/swerenfl/www-rs3'
+        git branch: 'main', credentialsId: '8a3f258f-2372-4519-a069-4733a16c672e', url: 'https://github.com/swerenfl/www-rs3'
     }
 
     // Deploy LH to Firebase

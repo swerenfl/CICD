@@ -20,7 +20,7 @@ node {
 
     // Checkout LH Repo
     stage ('Checkout') {
-        git credentialsId: '46384ba0-4e05-4e9b-aa38-97b82212c811', url: 'https://github.com/swerenfl/www-lasthope'
+        git credentialsId: '8a3f258f-2372-4519-a069-4733a16c672e', url: 'https://github.com/swerenfl/www-lasthope'
     }
 
     // Deploy LH to Firebase
