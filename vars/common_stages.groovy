@@ -16,11 +16,14 @@ def preflight() {
 }
 
 // Activate Service Account
-def actSA(gKey) {
+def actSA(gKey, gInstance) {
     try {
         echo "Activating Service Account"
-        withCredentials([file(credentialsId: $gKey, variable: 'GC_KEY')]) {
-            sh "gcloud auth activate-service-account --key-file=$GC_KEY"
+        withCredentials([file(credentialsId: "${gKey}", variable: 'GC_KEY')]) {
+            sh """
+                gcloud config set project $gInstance"
+                gcloud auth activate-service-account --key-file=$GC_KEY
+            """
         }
     }
     catch (err) {
