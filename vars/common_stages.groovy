@@ -21,7 +21,7 @@ def actSA(gKey, gInstance) {
         echo "Activating Service Account"
         withCredentials([file(credentialsId: "${gKey}", variable: 'GC_KEY')]) {
             sh """
-                gcloud config set project $gInstance"
+                gcloud config set project $gInstance
                 gcloud auth activate-service-account --key-file=$GC_KEY
             """
         }
