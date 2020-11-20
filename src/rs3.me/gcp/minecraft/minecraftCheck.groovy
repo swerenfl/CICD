@@ -16,7 +16,7 @@ node {
     // Preflight Stage
     stage ('Preflight') {
         common_stages.preflight()
-        common_stages.actSA("${G_KEY}")
+        common_stages.actSA("${G_KEY}", "${G_INSTANCE}")
     }
 
     // Check Status and Return
