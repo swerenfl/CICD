@@ -81,6 +81,9 @@ node {
                 echo "Installed version " + installedVersionInt + " is less than " + latestVersionInt + ". We need to upgrade!"
             }
 
+            // TODO
+            // HOW IS version 1.165 < 1.70? Also need to account for when versions only have 3 digits instead of 4
+
             // Parse the URL associated with the latest version
             firstURLClean = sh(returnStdout: true, script: """curl -sSL '${MC_MANIFEST_URL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'""").trim()
             echo "The current URL for the latest version is: ${firstURLClean}."
@@ -153,6 +156,11 @@ node {
             common_helpers.catchMe("${failureMessage}", err)
         }
     }
+
+    // TODO
+    // This next stage really isn't needed since it's already started to do a version check.
+    // Do we shut down after an upgrade is complete IF the server was offline to begin with?
+    // Fix all the trims. Gosh. It's. So. Ugly
 
     // Start Minecraft after the upgrade
     stage ('Start Minecraft') {

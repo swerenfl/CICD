@@ -185,6 +185,10 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
                     throw new Exception("Unknown error. Try again later!")
                 }
             }
+
+            // TODO
+            // Add a check again to see if the screen is actually up. If not, throw error
+
         }
 
         // If the instance is in a stopping stage, just throw an exception as there is nothing we can do 
