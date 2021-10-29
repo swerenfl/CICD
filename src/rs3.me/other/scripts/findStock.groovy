@@ -29,10 +29,11 @@ node {
         }
         else if (stockResults == "200") {
             echo "Item is in stock"
-           common_stages.notifySlack()
+            common_helpers.notifySlackSuccess()
         }
         else {
-           echo "Unknown result code. Will check again soon"
+           echo "Unknown result code. Result code is ${stockResults}. Will check again soon"
+           common_helpers.notifySlackUnstable()
         }
     }
 }
