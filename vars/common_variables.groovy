@@ -26,3 +26,8 @@ def rsVariables() {
     env.SLACK_NOTIFY_CHANNEL = "#09-websites"
     env.FB_CREDENTIALS = "c04f87a4-c027-4404-93db-40435e1f50b1"
 }
+
+def itemChkVariables() {
+    env.GENERAL_MESSAGE = "Your item is in stock! Proceed to purchase! The URL is ${itemCheck}."
+    env.SLACK_NOTIFY_CHANNEL = "#07-shopping"
+}

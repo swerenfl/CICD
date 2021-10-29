@@ -1,0 +1,38 @@
+#!groovy
+
+/* =============================================== */
+/*                    PIPELINE                     */
+/* =============================================== */ 
+
+// Load Library
+@Library('CICD')_
+
+// Start Pipeline
+node {
+
+    // Define Environment Variables
+    common_variables.itemChkVariables()
+
+    // Define Pipeline Variables
+    def itemCheck = "https://www.costco.com/callaway-edge-10-piece-golf-club-set,-right-handed---graphite.product.100683849.html"
+
+    // Preflight Stage
+    stage ('Preflight') {
+        common_stages.preflight()
+    }
+
+    // Start Stock Stage
+    stage ('Check Stock') {
+        def stockResults = sh(returnStdout: true, script: """curl -Is -A "Datadog/Synthetics" "${itemCheck}" | head -1 | cut -c 8-""").trim()
+        if (stockResults == "404") {
+            echo "Item is out of stock."
+        }
+        else if (stockResults == "200") {
+            echo "Item is in stock"
+           common_stages.notifySlack()
+        }
+        else {
+           echo "Unknown result code. Will check again soon"
+        }
+    }
+}
