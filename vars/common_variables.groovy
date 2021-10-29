@@ -29,5 +29,6 @@ def rsVariables() {
 
 def itemChkVariables(itemCheck) {
     env.GENERAL_MESSAGE = "Your item is in stock! Proceed to purchase! The URL is <${itemCheck}|here>."
+    env.GENERAL_MESSAGE_UNSTABLE = "Unknown return code. Evaluate the item <${itemCheck}|here>."
     env.SLACK_NOTIFY_CHANNEL = "#07-shopping"
 }

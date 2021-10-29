@@ -7,7 +7,7 @@ def notifySlackSuccess(channel = "${SLACK_NOTIFY_CHANNEL}", generalMessage = "${
     slackSend channel: "${channel}", color: '#7ed321', message: "SUCCESS! ${generalMessage}"
 }
 
-def notifySlackUnstable(channel = "${SLACK_NOTIFY_CHANNEL}", generalMessage = "${GENERAL_MESSAGE}") {
+def notifySlackUnstable(channel = "${SLACK_NOTIFY_CHANNEL}", generalMessage = "${GENERAL_MESSAGE_UNSTABLE}") {
     slackSend channel: "${channel}", color: '#ffd806', message: "UNSTABLE! ${generalMessage}"
 }
 
