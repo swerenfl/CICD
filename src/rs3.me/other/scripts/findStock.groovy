@@ -10,11 +10,11 @@
 // Start Pipeline
 node {
 
-    // Define Environment Variables
-    common_variables.itemChkVariables()
-
     // Define Pipeline Variables
     def itemCheck = "https://www.costco.com/callaway-edge-10-piece-golf-club-set,-right-handed---graphite.product.100683849.html"
+
+    // Define Environment Variables
+    common_variables.itemChkVariables()
 
     // Preflight Stage
     stage ('Preflight') {
