@@ -44,7 +44,7 @@ As of this writing the repo contains three folders defined by Jenkins best pract
         * The STATUS pipeline just shows status.
     * These can all be triggered from Slack/Discord depending on how you have your Jenkins job configuration setup
 2. Website(s)
-    * As of this writing, only [Last Hope Guild](https://lasthopeguild.com) and [RS3](https://rs3.me) is up and running. It is recommended to follow this [tutorial]https://medium.com/@aleemuddin13/how-to-host-static-website-on-firebase-hosting-for-free-9de8917bebf2).
+    * As of this writing, only [Last Hope Guild](https://lasthopeguild.com) and [RS3](https://rs3.me) is up and running. It is recommended to follow this [tutorial](https://medium.com/@aleemuddin13/how-to-host-static-website-on-firebase-hosting-for-free-9de8917bebf2).
     * Going through this, you'll come across the problem of how in the world do you deploy your changes.
         * The DEPLOY pipeline(s) call method `common_stages.wwwFBDeployStage("${FB_CREDENTIALS}")`. You only pass in the Firebase credentials. In doing this it'll essentially rsync your files. The deploy takes roughly 5 seconds and even dumps the cache.
 
