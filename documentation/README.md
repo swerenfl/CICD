@@ -55,6 +55,14 @@ server {
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
+
+NOTE: If you run into the following error: `nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)` run: `sudo apachectl stop`
+
+5. Step 5: Start NGINX if no errors
     * `sudo systemctl enable --now nginx`
     * `sudo systemctl restart nginx`
+
+
+
+
 
