@@ -34,7 +34,7 @@ upstream jenkins {
 
 server {
   listen 80;
-  server_name *jenkins.example.com*;
+  server_name jenkins.example.com;
 
   location / {
     proxy_set_header        Host $host:$server_port;
@@ -49,4 +49,12 @@ server {
   }
 }
 ```
+4. Step 4: Validate your NGINX configuration
+    * `sudo nginx -t`
+```
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+    * `sudo systemctl enable --now nginx`
+    * `sudo systemctl restart nginx`
 
