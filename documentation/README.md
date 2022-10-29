@@ -10,9 +10,9 @@ This README describes how to install SSL on Jenkins via nginx and certbot
 ### Installation ###
 
 1. Step 1: Install NGINX
-    * sudo apt-get update
-    * sudo apt-get upgrade
-    * sudo apt install -y nginx vim
+    * `sudo apt-get update`
+    * `sudo apt-get upgrade`
+    * `sudo apt install -y nginx vim`
 
 2. Step 2: Install Certbot and Verify
     * sudo apt-get update
