@@ -20,7 +20,7 @@ This README describes how to install SSL on Jenkins via nginx and certbot
     * `sudo apt-get upgrade`
     * `sudo apt-get install -y certbot`
     * `sudo apt-get install -y python3-certbot-nginx`
-    * `certbot --version`
+    * Verify: `certbot --version`
 
 3. Configure NGINX
     * `sudo vim /etc/nginx/conf.d/jenkins.conf`
@@ -59,7 +59,7 @@ nginx: configuration file /etc/nginx/nginx.conf test is successful
 
 NOTE: If you run into the following error: `nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)` run: `sudo apachectl stop`
 
-5. Start NGINX if no errors
+5. Start NGINX once no errors
     * `sudo systemctl enable --now nginx`
     * `sudo systemctl restart nginx`
 
@@ -122,6 +122,5 @@ IMPORTANT NOTES:
     * `sudo crontab -e`
     * `0 12 * * * /usr/bin/certbot renew --quiet`
 
-
-
-
+10. Finish
+    * Clap your hands because you're all done.
