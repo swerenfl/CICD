@@ -1,4 +1,4 @@
-# SSL on Jenkins #
+# Timezone on Jenkins #
 
 This README describes how to correct your timezone on Jenkins. In Jenkins you can modify your user settings for timezone, but you may want to correct it at the server level.
 
