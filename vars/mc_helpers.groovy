@@ -22,7 +22,7 @@ def checkMounted(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='sudo mount /dev/disk/by-id/google-minecraft-disk /home/minecraft; \
+        --command='sudo mount /dev/disk/by-id/google-mc-attached /home/minecraft; \
         cd /home/minecraft && sudo screen -d -m -S mcs java -Xms2G -Xmx6G -jar server.jar nogui'
     """
 }
