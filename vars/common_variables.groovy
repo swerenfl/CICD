@@ -27,6 +27,12 @@ def rsVariables() {
     env.FB_CREDENTIALS = "c04f87a4-c027-4404-93db-40435e1f50b1"
 }
 
+def xxyyzzVariables() {
+    env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER | URL: $BUILD_URL"
+    env.SLACK_NOTIFY_CHANNEL = "#09-websites"
+    env.FB_CREDENTIALS = "xxx"
+}
+
 def itemChkVariables(itemCheck) {
     env.GENERAL_MESSAGE = "Your item is in stock! Proceed to purchase! The URL is <${itemCheck}|here>."
     env.GENERAL_MESSAGE_UNSTABLE = "Unknown return code. Evaluate the item <${itemCheck}|here>."
