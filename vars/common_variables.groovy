@@ -30,7 +30,7 @@ def rsVariables() {
 def xxyyzzVariables() {
     env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER | URL: $BUILD_URL"
     env.SLACK_NOTIFY_CHANNEL = "#09-websites"
-    env.FB_CREDENTIALS = "xxx"
+    env.FB_CREDENTIALS = "e8fb3655-1d10-4e9d-b2a5-878c855adcc9"
 }
 
 def itemChkVariables(itemCheck) {
