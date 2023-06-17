@@ -101,10 +101,10 @@ def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     def buildCause = currentBuild.getBuildCauses()[0].shortDescription
     echo "Current build was caused by: ${buildCause}\n"
     if (buildCause == "Started by timer") { // Cron
-        def message = "ATTENTION: Server will shutdown within the next minute for the evening. Thank you for playing today!"
+        message = "ATTENTION: Server will shutdown within the next minute for the evening. Thank you for playing today!"
     }
     else { // User or other means
-        def message = "ATTENTION: Server will shutdown within the next minute for maintenance. See you soon!"
+        message = "ATTENTION: Server will shutdown within the next minute for maintenance. See you soon!"
     }
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
