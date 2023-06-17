@@ -100,7 +100,7 @@ def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
 def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='sudo screen -S mcs -p 0 -X stuff "say ATTENTION: Server will shutdown in 10 seconds for the evening.\015"; sleep 10'
+        --command='sudo screen -S mcs -p 0 -X stuff "say ATTENTION: Server will shutdown within the next minute for the evening. Thank you for playing today!\015"; sleep 10'
     """
 }
 
