@@ -73,7 +73,7 @@ def checkUp(gZone) {
 }
 
 // stopMinecraftServer -- expecting 2 inputs
-def stopMinecraft(gProject, gZone) {
+def stopMinecraft(gZone, gProject) {
     sh """
         gcloud compute instances stop ${gProject} --zone ${gZone}
     """
@@ -97,7 +97,7 @@ def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
 }
 
 // sendMessage -- expecting 4 inputs
-def sendMessage(gInstance, gZone, gServiceAcct, gProject) {
+def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
         --command='sudo screen -S mcs -p 0 -X stuff "say ATTENTION: Server will shutdown in 10 seconds for the evening.\015"; sleep 10'

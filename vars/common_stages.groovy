@@ -209,15 +209,15 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
 }
 
 // Stop Minecraft
-def stopMCS(gInstance, gZone, gServiceAcct, gProject) {
+def stopMCS(gZone, gProject, gInstance, gServiceAcct) {
     try {
         def isOffline = mc_helpers.checkUp("${gZone}")
         if (isOffline == "TERMINATED") {
             echo "Nothing to do here."
         }
         else {
-            mc_helpers.sendMessage("${gProject}", "${gZone}", "${gServiceAcct}", "${gInstance}")
-            mc_helpers.stopMinecraft("${gProject}", "${gZone}")
+            mc_helpers.sendMessage("${gZone}", "${gProject}", "${gInstance}", "${gServiceAcct}")
+            mc_helpers.stopMinecraft("${gZone}", "${gProject}")
         }
     }
     catch (err) {
