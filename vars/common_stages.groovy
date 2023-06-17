@@ -247,7 +247,7 @@ def sendMessage(message) {
     try {
         sh """sudo screen -S mcs -p 0 -X stuff "say ${message}\015"; sleep 10"""
     }
-    catch {
+    catch (err) {
         def failureMessage = "While sending a message to the users something went wrong. Review logs for further details"
         common_helpers.catchMe("${failureMessage}", err)
     }
