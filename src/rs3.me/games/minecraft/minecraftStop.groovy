@@ -36,9 +36,7 @@ node {
 
     // Stop Minecraft Stage
     stage ('Stop Minecraft') {
-        // 
-        common_stages.sendMessage("ATTENTION: Server will shutdown in 10 seconds for the evening.")
-        common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
+        common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}", "${G_INSTANCE}", "${G_SERV_ACCT}")
     }
 
     // Verify Termination
