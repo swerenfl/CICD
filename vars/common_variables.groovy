@@ -10,8 +10,8 @@ def envVariables() {
     env.SLACK_NOTIFY_CHANNEL = "#08-gaming"
     env.G_KEY = "cd38590b-317c-4eb7-a58f-39a52d9234e4"
     env.G_PROJECT = "mc-server"
-    env.G_INSTANCE = "minecraft-project-2019-11-03"
-    env.G_ZONE = "us-central1-f"
+    env.G_INSTANCE = "minecraft-project-2023-06-16"
+    env.G_ZONE = "us-central1-a"
     env.G_SERV_ACCT = "jenkins"
 }
 

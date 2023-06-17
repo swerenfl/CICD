@@ -23,7 +23,7 @@ def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
         --command='sudo mount /dev/disk/by-id/google-mc-attached /home/minecraft; \
-        cd /home/minecraft && sudo screen -d -m -S mcs java -Xms2G -Xmx6G -jar server.jar nogui'
+        cd /home/minecraft && sudo screen -d -m -S mcs java -Xms4G -Xmx6G -jar server.jar nogui'
     """
 }
 
@@ -31,7 +31,7 @@ def startMinecraftMount(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftNoMount(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms2G -Xmx6G -jar server.jar nogui'
+        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms4G -Xmx6G -jar server.jar nogui'
     """
 }
 
