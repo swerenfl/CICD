@@ -31,6 +31,6 @@ node {
         common_stages.notifyEmail()
         common_stages.notifyDiscord()
         common_stages.notifySlack()
-        build job: 'Minecraft_STATUS', wait: false
+        build job: 'Minecraft_STATUS'
     }
 }
