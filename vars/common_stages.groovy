@@ -109,7 +109,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     try {
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
-        initialCheck = ${onlineCheck}
+        initialCheck = onlineCheck
         echo "The value retrieved initially is: ${initialCheck}"
         
         // If the compute instance is offine, then start it and then run the startup sequence
