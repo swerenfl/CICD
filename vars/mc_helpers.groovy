@@ -98,6 +98,7 @@ def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
 
 // generate new world -- expecting 5 inputs
 def newWorld(gInstance, gZone, gServiceAcct, gProject, newName) {
+    sleep 15
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
         --command="cd /home/minecraft; sudo sed -i 's/^level-name.*/level-name=${newName}/' server.properties; cat server.properties"
