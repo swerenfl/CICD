@@ -24,6 +24,7 @@ node {
     // Start Minecraft Stage. Need to turn on server at least to update server.properties
     stage ('Start Minecraft') {
         common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
+        start_check = env.INITIAL_CHECK
     }
 
     // Do changes
@@ -41,7 +42,7 @@ node {
 
     // Put minecraft back into the state it was when this job started
     stage ('Post-Processing') {
-        if (INITIAL_CHECK == "RUNNING") {
+        if (start_check == "RUNNING") {
             echo "Since the server was online when the new world process started, the server was left on."
             return
         }
