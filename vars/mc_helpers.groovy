@@ -107,7 +107,7 @@ def newWorld(gInstance, gZone, gServiceAcct, gProject, newName) {
 // generate new name for new world -- expecting 0 inputs
 def newWorldName() {
     def now = new Date()
-    def nowFormatted = now.format('yyyy-MM-dd')
+    def nowFormatted = now.format('yyyy-MM-dd-HHmmss')
     def newWorldDateName = nowFormatted + "-world"
     echo "The world name will be: ${newWorldDateName}."
     return newWorldDateName
