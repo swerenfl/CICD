@@ -41,7 +41,7 @@ node {
 
     // Put minecraft back into the state it was when this job started
     stage ('Post-Processing') {
-        if (initialCheck == "RUNNING") {
+        if (INITIAL_CHECK == "RUNNING") {
             echo "Since the server was online when the new world process started, the server was left on."
             return
         }
