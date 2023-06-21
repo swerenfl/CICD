@@ -103,7 +103,7 @@ node {
         if (isOffline == "RUNNING") {
             def extraMessage = "Since the server was online when the update process started, the server was left on."
             common_helpers.noUpdates("${extraMessage}")
-            build job: 'Minecraft_STATUS', wait: false
+            build job: 'Minecraft_STATUS'
             return
         }
         else {
@@ -111,7 +111,7 @@ node {
             common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
             common_stages.verifyMCSOffline("${G_ZONE}")
             common_helpers.noUpdates("${extraMessage}")
-            build job: 'Minecraft_STATUS', wait: false
+            build job: 'Minecraft_STATUS'
             return
         }
     }

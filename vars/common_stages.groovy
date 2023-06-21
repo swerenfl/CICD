@@ -109,7 +109,8 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
     try {
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
-        echo "The value retrieved is: ${onlineCheck}"
+        initialCheck = ${onlineCheck}
+        echo "The value retrieved initially is: ${initialCheck}"
         
         // If the compute instance is offine, then start it and then run the startup sequence
         if (onlineCheck == "TERMINATED") {
@@ -119,7 +120,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
 
             // Check if online for sure.
             onlineCheck = mc_helpers.checkUp("${gZone}")
-            echo "The value retrieved is: ${onlineCheck}"
+            echo "Ensuring that the server is fully operational. The value is currently: ${onlineCheck}"
 
             // If still not started, wait another 60 secs then start again
             if (onlineCheck == "PROVISIONING" || onlineCheck == "STARTING") {
@@ -127,7 +128,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
 
                 // Check again just to make sure
                 onlineCheck = mc_helpers.checkUp("${gZone}")
-                echo "The value retrieved is: ${onlineCheck}"
+                echo "Ensuring that the server is fully operational. The value is currently: ${onlineCheck}"
 
                 // If still starting, exit as it's been too long, else if instance is running then run the startup sequence
                 if (onlineCheck == "PROVISIONING" || onlineCheck == "STARTING") {
@@ -243,13 +244,14 @@ def verifyMCSOffline(gZone) {
     }
 }
 
-// Send message to the users in Minecraft
-def sendMessage(message) {
+// Generate New World
+def newWorldOrder(gInstance, gZone, gServiceAcct, gProject) {
     try {
-        sh """sudo screen -S mcs -p 0 -X stuff "say ${message}\015"; sleep 10"""
+        def newNameForWorld = mc_helpers.newWorldName()
+        mc_helpers.newWorld("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${newNameForWorld}")
     }
-    catch (err) {
-        def failureMessage = "While sending a message to the users something went wrong. Review logs for further details"
+    catch (Exception err) {
+        def failureMessage = 'While generating a new world something went wrong. Review logs for further details'
         common_helpers.catchMe("${failureMessage}", err)
     }
 }

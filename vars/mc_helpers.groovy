@@ -96,6 +96,23 @@ def killJava(gInstance, gZone, gServiceAcct, gProject, latestVersionClean) {
     """
 }
 
+// generate new world -- expecting 5 inputs
+def newWorld(gInstance, gZone, gServiceAcct, gProject, newName) {
+    sh """
+        gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+        --command="cd /home/minecraft; sudo sed -i 's/^level-name.*/level-name=${newName}/' server.properties; cat server.properties"
+    """
+}
+
+// generate new name for new world -- expecting 0 inputs
+def newWorldName() {
+    def now = new Date()
+    def nowFormatted = now.format('yyyy-MM-dd')
+    def newWorldDateName = nowFormatted + "-world"
+    echo "The world name will be: ${newWorldDateName}."
+    return newWorldDateName
+}
+
 // sendMessage -- expecting 4 inputs
 def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     def buildCause = currentBuild.getBuildCauses()[0].shortDescription
