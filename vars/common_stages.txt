@@ -4,29 +4,72 @@
 </p>
 <p></p>
 <pre>stage ('Preflight') {
-   common_stages.startSlack("${slackNotifyChannel}")
-   common_stages.preflight("${slackNotifyChannel}")
+   common_stages.startSlack()
+   common_stages.preflight()
 }</pre>
 <p>
    The following is a general list of helpers/methods that are available.
 </p>
 <dl class="slack-vars">
    <dt>preflight()</dt>
-   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, sets the job properties. As of this writing, the two job properties it is setting is defining the amount of artifacts to keep and disabling concurrency. The method expects one input: <code>slackNotifyChannel</code>. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, sets the job properties.
+As of this writing, the two job properties it is setting is defining the amount of builds/artifacts to keep (10) and disabling
+concurrency. The method does not take any inputs.</dd>
+   <dt>actSA(gKey, gInstance)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, activates a GCP service
+account using credentials stored in Jenkins. <code>gKey</code> is the credentials ID for the service account key file and
+<code>gInstance</code> is the GCP project to target. The method is wrapped in a try/catch and uses the <code>common_helpers.catchMe()</code>
+helper if activation fails.</dd>
    <dt>startSlack()</dt>
-   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Slack that the job has started. This method is usually accompanied with <code>preflight()</code> in the same stage (usually the first stage). As of this writing, this method calls <code>common_helpers.notifySlackStart()</code> in the common_helpers file. The method expects one input: <code>slackNotifyChannel</code>. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Slack that the
+job has started. As of this writing, this method calls <code>common_helpers.notifySlackStart()</code> in the common_helpers file.
+The method does not take any inputs.</dd>
    <dt>startDiscord()</dt>
-   <dd style="margin: 0 0 1em 0">TODO</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Discord that the
+job has started. As of this writing, this method calls <code>common_helpers.notifyDiscordStart()</code> in the common_helpers file.
+The method does not take any inputs.</dd>
    <dt>notifyEmail()</dt>
-   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via email that the job has ended. This method is usually accompanied with <code>notifySlack()</code> in the same stage (usually the last stage). As of this writing, this method calls <code>emailext</code> defined in General Settings of Jenkins. Further properties are set there too. The method expects two inputs: <code>slackNotifyChannel</code> and <code>emailRecp</code>. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings. <code>emailRecp</code> is users that will receive the email notification comma-seperated.</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via email that the
+job has ended. This method is usually accompanied with <code>notifySlack()</code> in the same stage (usually the last stage).
+As of this writing, this method calls <code>common_helpers.notifyEmailSuccess()</code> in the common_helpers file. The method
+does not take any inputs.</dd>
    <dt>notifySlack()</dt>
-   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Slack that the job has ended. This method is usually accompanied with <code>notifyEmail()</code> in the same stage (usually the last stage). As of this writing, this method calls <code>common_helpers.notifySlackSuccess()</code> in the common_helpers file. The method expects one input: <code>slackNotifyChannel</code>. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings.</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Slack that the
+job has ended. This method is usually accompanied with <code>notifyEmail()</code> in the same stage (usually the last stage).
+As of this writing, this method calls <code>common_helpers.notifySlackSuccess()</code> in the common_helpers file. The method does
+not take any inputs.</dd>
    <dt>notifyDiscord()</dt>
-   <dd style="margin: 0 0 1em 0">TODO</dd>
-   <dt>startMCS()</dt>
-   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, is the startup sequence to start Minecraft. As of this writing, this method runs through various logic to determine if the instance is online or offline, if the drive is mounted or unmounted, and if the screen (java) is enabled or disabled. The method expects five inputs: <code>gInstance</code>, <code>gZone</code>, <code>gServiceAcct</code>, <code>gProject</code>, and <code>slackNotifyChannel</code>. <code>gInstance</code> is the defined Minecraft instance name in GCP. <code>gZone</code> is the defined zone where the Minecraft instance lives in GCP. <code>gServiceAcct</code> is the defined service account which interacts with the Minecraft instance on GCP. <code>gProject</code> is the defined project name for the Minecraft instance in GCP. <code>slackNotifyChannel</code> is the channel name where you want to send the Slack notification if it fails (the method is wrapped in a try/catch). If a channel is not specified it should default to the channel configured in the global settings.</dd>
-   <dt>stopMCS()</dt>
-   <dd style="margin: 0 0 1em 0">TODO</dd>
-   <dt>verifyMCSOffline()</dt>
-   <dd style="margin: 0 0 1em 0">TODO</dd>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, notifies via Discord that the
+job has ended. This method is usually accompanied with other notifier helpers in the last stage. As of this writing, this method
+calls <code>common_helpers.notifyDiscordSuccess()</code> in the common_helpers file. The method does not take any inputs.</dd>
+   <dt>startMCS(gInstance, gZone, gServiceAcct, gProject)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, is the startup sequence to
+start Minecraft. As of this writing, this method runs through various logic to determine if the instance is online or offline, if
+the drive is mounted or unmounted, and if the screen (java) is enabled or disabled. The method expects four inputs: <code>gInstance</code>,
+<code>gZone</code>, <code>gServiceAcct</code>, and <code>gProject</code>. <code>gInstance</code> is the defined Minecraft instance name
+in GCP. <code>gZone</code> is the defined zone where the Minecraft instance lives in GCP. <code>gServiceAcct</code> is the defined
+service account which interacts with the Minecraft instance on GCP. <code>gProject</code> is the defined project name for the
+Minecraft instance in GCP.</dd>
+   <dt>stopMCS(gZone, gProject, gInstance, gServiceAcct)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, runs the shutdown sequence
+for the Minecraft server. It sends a shutdown warning to players, stops the Minecraft process, and then stops the compute instance
+in GCP. The method expects four inputs: <code>gZone</code>, <code>gProject</code>, <code>gInstance</code>, and <code>gServiceAcct</code>.
+<code>gZone</code> is the defined zone where the Minecraft instance lives in GCP. <code>gProject</code> is the defined project name
+for the Minecraft instance in GCP. <code>gInstance</code> is the defined Minecraft instance name in GCP. <code>gServiceAcct</code>
+is the defined service account which interacts with the Minecraft instance on GCP.</dd>
+   <dt>verifyMCSOffline(gZone)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, verifies that the Minecraft
+instance is offline by checking that the compute instance is in a <code>TERMINATED</code> state. If it is not terminated, an
+exception is thrown. The method expects one input: <code>gZone</code>, the defined zone where the Minecraft instance lives in GCP.</dd>
+   <dt>newWorldOrder(gInstance, gZone, gServiceAcct, gProject)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, creates a new Minecraft world
+with a generated name. The method expects four inputs: <code>gInstance</code>, <code>gZone</code>, <code>gServiceAcct</code>, and
+<code>gProject</code>, matching the parameters used by the Minecraft helpers for world management.</dd>
+   <dt>wwwDeployStage(gBucketURL)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, deploys web assets to a GCS
+bucket using the value provided in <code>gBucketURL</code>. The method expects one input: <code>gBucketURL</code>, the destination
+bucket path.</dd>
+   <dt>wwwFBDeployStage(fbCredentials)</dt>
+   <dd style="margin: 0 0 1em 0">This method, which should be wrapped with a <code>stage</code> block, deploys web assets via Firebase.
+The method expects one input: <code>fbCredentials</code>, the credentials identifier to use for the Firebase deployment helper.</dd>
 </dl>
