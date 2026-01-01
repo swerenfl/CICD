@@ -24,10 +24,8 @@ def lhVariables() {
 def rsVariables() {
     env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER | URL: $BUILD_URL"
     env.SLACK_NOTIFY_CHANNEL = "#09-websites"
-    // OLD - firebase login:ci
-    env.FB_CREDENTIALS = "c04f87a4-c027-4404-93db-40435e1f50b1"
-    // NEW - Google JSON
-    // env.FB_CREDENTIALS = "76fa851e-8ec5-4341-98e7-95cbea554dd5"
+    env.FB_CREDENTIALS = "c04f87a4-c027-4404-93db-40435e1f50b1" // OLD Method
+    env.GOOGLE_APPLICATION_CREDENTIALS = "76fa851e-8ec5-4341-98e7-95cbea554dd5" // NEW Method
 }
 
 def xxyyzzVariables() {
