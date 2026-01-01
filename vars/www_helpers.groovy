@@ -13,7 +13,7 @@ def wwwDeploy(gBucketURL) {
 def fbDeploy(fbCredentials) {
     nodejs('NodeJS') {
         withCredentials([string(credentialsId: "${fbCredentials}", variable: "FB_KEY")]) {
-            sh "firebase deploy --token ${FB_KEY}"
+            sh "firebase deploy --debug --token ${FB_KEY} --only hosting"
         }
     }
 }
