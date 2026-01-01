@@ -25,7 +25,7 @@ node {
 
     // Deploy LH to Firebase
     stage ('Deploy') {
-        common_stages.wwwFBDeployStage("${FB_CREDENTIALS}")
+        common_stages.wwwFBDeployStage()
     }
 
     // Notify users that things have finished

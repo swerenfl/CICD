@@ -9,14 +9,11 @@ def wwwDeploy(gBucketURL) {
     """
 }
 
-// fbDeploy -- expecting 0 inputs
-def fbDeploy(fbCredentials) {
+// fbDeploy -- expecting 1 inputs
+def fbDeploy(FB_CREDENTIALS) {
     nodejs('NodeJS') {
-        withCredentials([file(credentialsId: "${fbCredentials}", variable: "FB_KEY")]) {
-            sh "pwd"
-            sh "ls -la"
-            sh "cat firebase.json"
-            sh "firebase deploy --debug --token ${FB_KEY} --only hosting"
+        withCredentials([file(credentialsId: "${FB_CREDENTIALS}", variable: "FB_KEY")]) {
+            sh "firebase deploy --only hosting"
         }
     }
 }
