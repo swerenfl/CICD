@@ -272,9 +272,9 @@ def wwwDeployStage(gBucketURL) {
 }
 
 // Deploy with a Firebase setup
-def wwwFBDeployStage(FB_CREDENTIALS) {
+def wwwFBDeployStage(fbCredentials) {
     try {
-        www_helpers.fbDeploy("${FB_CREDENTIALS}")
+        www_helpers.fbDeploy("${fbCredentials}")
     }
     catch (err) {
         def failureMessage = "While deploying code to Firebase something went wrong. Review logs for further details"
