@@ -18,7 +18,8 @@ def envVariables() {
 def lhVariables() {
     env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER | URL: $BUILD_URL"
     env.SLACK_NOTIFY_CHANNEL = "#09-websites"
-    env.FB_CREDENTIALS = "41aad29c-b842-44dd-a95e-e98a9a74d482"
+    env.FB_CREDENTIALS = "41aad29c-b842-44dd-a95e-e98a9a74d482" // OLD Method
+    env.GOOGLE_APPLICATION_CREDENTIALS = "c9cba4a0-983e-475b-a4e0-da104ebd4bfe" // NEW Method
 }
 
 def rsVariables() {
