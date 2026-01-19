@@ -117,12 +117,11 @@ def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     else { // User or other means
         message = "ATTENTION: Server will shutdown within the next minute for maintenance. See you soon!"
     }
-    withEnv(["MC_MESSAGE=${message}"]) {
-        sh """
-            gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-            --command="if sudo screen -list | grep -q 'fabric'; then SCREEN=fabric; else SCREEN=mcs; fi; sudo screen -S \$SCREEN -p 0 -X stuff \"say \$MC_MESSAGE\015\"; sleep 10"
-        """
-    }
+    def safeMessage = message.replace("\\", "\\\\").replace("\"", "\\\"")
+    sh """
+        gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
+        --command='if sudo screen -list | grep -q "fabric"; then SCREEN=fabric; else SCREEN=mcs; fi; sudo screen -S \$SCREEN -p 0 -X stuff "say ${safeMessage}\015"; sleep 10'
+    """
 }
 
 return this
