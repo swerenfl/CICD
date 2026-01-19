@@ -169,7 +169,8 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
 
         // If compute instance is RUNNING
         else if (onlineCheck == "RUNNING") {
-            def mcsRun = mc_helpers.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            def screenName = useFabric ? "fabric" : "mcs"
+            def mcsRun = mc_helpers.mcsRunning("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}", "${screenName}")
             def mcsRunClean = mcsRun.trim()
             echo "Is the minecraft screen running? ${mcsRunClean}"
 

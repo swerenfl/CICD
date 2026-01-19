@@ -9,11 +9,13 @@ def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
     return runMCS
 }
 
+
+
 // startMinecraftStandard -- expecting 4 inputs
 def startMinecraftStandard(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms4G -Xmx6G -jar server.jar nogui'
+        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms12G -Xmx16G -jar server.jar nogui'
     """
 }
 
@@ -21,7 +23,7 @@ def startMinecraftStandard(gInstance, gZone, gServiceAcct, gProject) {
 def startMinecraftFabric(gInstance, gZone, gServiceAcct, gProject) {
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='cd /home/minecraft && sudo screen -d -m -S mcs java -Xms12G -Xmx16G -jar /home/minecraft/opt/fabric.jar nogui'
+        --command='cd /home/minecraft/opt && sudo screen -d -m -S fabric java -Xms12G -Xmx16G -jar /home/minecraft/opt/fabric.jar nogui'
     """
 }
 
