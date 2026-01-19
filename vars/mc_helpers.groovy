@@ -1,10 +1,10 @@
 #!groovy
 
-// mcsRunning -- expecting 4 inputs
-def mcsRunning (gInstance, gZone, gServiceAcct, gProject) {
+// mcsRunning -- expecting 5 inputs (screenName optional)
+def mcsRunning (gInstance, gZone, gServiceAcct, gProject, screenName = "mcs") {
     def runMCS = sh returnStdout:true, script: """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='if sudo screen -list | grep -q "mcs"; then echo "yes"; else echo "no"; fi' """
+        --command='if sudo screen -list | grep -q "${screenName}"; then echo "yes"; else echo "no"; fi' """
     echo "The value of runMCS: ${runMCS}"
     return runMCS
 }
@@ -118,7 +118,7 @@ def sendMessage(gZone, gProject, gInstance, gServiceAcct) {
     }
     sh """
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
-        --command='sudo screen -S mcs -p 0 -X stuff "say ${message}\015"; sleep 10'
+        --command="if sudo screen -list | grep -q 'fabric'; then SCREEN=fabric; else SCREEN=mcs; fi; sudo screen -S \\$SCREEN -p 0 -X stuff \\\"say ${message}\\015\\\"; sleep 10"
     """
 }
 
