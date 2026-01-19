@@ -146,7 +146,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
         if (onlineCheck == "TERMINATED") {
             echo "The status of the server is: ${onlineCheck}"
             sh "gcloud compute instances start ${gProject} --zone=${gZone}"
-            sh "sleep 15"
+            sh "sleep 45"
 
             // Check if online for sure.
             onlineCheck = mc_helpers.checkUp("${gZone}")
@@ -166,9 +166,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
                 }
                 else if (onlineCheck == "RUNNING") {
                     waitForSsh()
-                    waitForSsh()
-                waitForSsh()
-                startServer()
+                    startServer()
                 }
                 else {
                     throw new Exception("Unknown error. Check on your server!")
@@ -177,6 +175,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
 
             // If it has started then run the startup sequence
             else if (onlineCheck == "RUNNING") {
+                waitForSsh()
                 startServer()
             }
 
@@ -200,6 +199,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
 
             else {
                 echo "The status of the server is: ${onlineCheck}"
+                waitForSsh()
                 startServer()
             }
 
