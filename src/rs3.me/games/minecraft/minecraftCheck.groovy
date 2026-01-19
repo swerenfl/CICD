@@ -13,6 +13,10 @@ node {
     // Load Env Variables
     common_variables.envVariables()
 
+    def isOffline = 'null'
+    def slackColor = ''
+    def discordColor = ''
+
     // Preflight Stage
     stage ('Preflight') {
         common_stages.preflight()

@@ -13,6 +13,8 @@ node {
     // Load Env Variables
     common_variables.envVariables()
 
+    def isOffline = 'null'
+
     // Preflight Stage
     stage ('Preflight') {
         common_stages.actSA("${G_KEY}", "${G_INSTANCE}")
