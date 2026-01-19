@@ -122,6 +122,20 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
                 mc_helpers.startMinecraftStandard("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
             }
         }
+        def waitForSsh = {
+            int attempts = 6
+            int delaySeconds = 5
+            for (int i = 1; i <= attempts; i++) {
+                def status = sh(returnStatus: true, script: "gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} --command='true'")
+                if (status == 0) {
+                    return
+                }
+                echo "SSH not ready yet (attempt ${i}/${attempts}). Waiting ${delaySeconds}s..."
+                sleep time: delaySeconds, unit: 'SECONDS'
+                delaySeconds = Math.min(delaySeconds * 2, 40)
+            }
+            throw new Exception("SSH was not ready after ${attempts} attempts. Try again in a minute.")
+        }
 
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
@@ -151,7 +165,10 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
                     throw new Exception("Your server has been in a provisioning or starting stage for too long. Check on your server!")
                 }
                 else if (onlineCheck == "RUNNING") {
-                    startServer()
+                    waitForSsh()
+                    waitForSsh()
+                waitForSsh()
+                startServer()
                 }
                 else {
                     throw new Exception("Unknown error. Check on your server!")
