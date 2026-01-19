@@ -105,8 +105,22 @@ def notifyDiscord() {
 /*                GENERAL STAGES                   */
 /* =============================================== */ 
 // Start Minecraft
-def startMCS(gInstance, gZone, gServiceAcct, gProject) {
+def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
     try {
+        def startModeClean = "${startMode}".trim()
+        if (startModeClean != "0" && startModeClean != "1") {
+            throw new Exception("Unknown start mode '${startModeClean}'. Expected 0 or 1.")
+        }
+        def useFabric = (startModeClean == "1")
+        def startServer = {
+            if (useFabric) {
+                mc_helpers.startMinecraftFabric("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            }
+            else {
+                mc_helpers.startMinecraftStandard("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+            }
+        }
+
         // Assign a variable to whatever the status of the compute instance is
         def onlineCheck = mc_helpers.checkUp("${gZone}")
         env.INITIAL_CHECK = "${onlineCheck}"
@@ -135,7 +149,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
                     throw new Exception("Your server has been in a provisioning or starting stage for too long. Check on your server!")
                 }
                 else if (onlineCheck == "RUNNING") {
-                    mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                    startServer()
                 }
                 else {
                     throw new Exception("Unknown error. Check on your server!")
@@ -144,7 +158,7 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
 
             // If it has started then run the startup sequence
             else if (onlineCheck == "RUNNING") {
-                mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
+                startServer()
             }
 
             // If it's in some other state, then throw an exception
@@ -164,27 +178,9 @@ def startMCS(gInstance, gZone, gServiceAcct, gProject) {
                 echo "The minecraft server is already running."
             }
 
-            // If the instance is RUNNING, and the Minecraft Screen is NOT running, then we have to see if we actually mounted the drive
             else {
                 echo "The status of the server is: ${onlineCheck}"
-                def isMounted = mc_helpers.checkMounted("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-                def isMountedClean = isMounted.trim()
-                echo "The value of mounted is: ${isMountedClean}"
-
-                // If the drive is mounted, then run the commands to start the screen without mounting
-                if (isMountedClean == "1") {
-                    mc_helpers.startMinecraftNoMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-                }
-
-                // If the drive is NOT mounted, then run the commands to mount and start the screen
-                else if (isMountedClean == "0") {
-                    mc_helpers.startMinecraftMount("${gInstance}", "${gZone}", "${gServiceAcct}", "${gProject}")
-                }
-
-                // If anything else, then throw an error
-                else {
-                    throw new Exception("Unknown error. Try again later!")
-                }
+                startServer()
             }
 
             // TODO

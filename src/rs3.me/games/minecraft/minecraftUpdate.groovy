@@ -32,21 +32,11 @@ node {
     stage ('Online Check') {
         try {
             isOffline = mc_helpers.checkUp("${G_ZONE}")
-            if (isOffline == "RUNNING") { // If running, then make sure the drive is mounted
-                def mountProc = mc_helpers.checkMounted("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
-                def mountProcClean = mountProc.trim()
-                int mountInt = mountProcClean.toInteger()
-                echo "The amount of minecraft drives mounted is: ${mountInt}"
-
-                if (mountInt > 0) { // If running, and drive is mounted, we're good 
-                    echo "Your server is running and can proceed with the update!"
-                }
-                else { // If running, and the drive is not mounted, then run the startup sequence
-                    common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
-                }
+            if (isOffline == "RUNNING") { // If running, we're good
+                echo "Your server is running and can proceed with the update!"
             }
             else { // Run the startup sequence because the server is not running
-                common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
+                common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "0")
             }
         }
          catch (err) {
@@ -67,22 +57,37 @@ node {
             installedVersionClean = installedVersion.trim()
             echo "The version we have installed is ${installedVersionClean}"
 
-            // Convert the versions into ints for comparison
-            int installedVersionInt = installedVersionClean.replace(".", "").toInteger()
-            int latestVersionInt = latestVersionClean.replace(".", "").toInteger()
+            // Compare the versions numerically by dot-separated segments.
+            def compareVersions = { String a, String b ->
+                def aParts = a.tokenize('.').collect { it.toInteger() }
+                def bParts = b.tokenize('.').collect { it.toInteger() }
+                int maxLen = Math.max(aParts.size(), bParts.size())
+                for (int i = 0; i < maxLen; i++) {
+                    int aVal = (i < aParts.size()) ? aParts[i] : 0
+                    int bVal = (i < bParts.size()) ? bParts[i] : 0
+                    if (aVal != bVal) {
+                        return (aVal < bVal) ? -1 : 1
+                    }
+                }
+                return 0
+            }
+
+            int versionCompare = compareVersions(installedVersionClean, latestVersionClean)
 
             // Compare the versions
-            if (latestVersionInt == installedVersionInt) {
-                echo "Installed version " + installedVersionInt + " is equal to " + latestVersionInt + "."
+            if (versionCompare == 0) {
+                echo "Installed version " + installedVersionClean + " is equal to " + latestVersionClean + "."
                 currentBuild.result = 'SUCCESS'
                 return
             }
-            else {
-                echo "Installed version " + installedVersionInt + " is less than " + latestVersionInt + ". We need to upgrade!"
+            else if (versionCompare < 0) {
+                echo "Installed version " + installedVersionClean + " is less than " + latestVersionClean + ". We need to upgrade!"
             }
-
-            // TODO
-            // HOW IS version 1.165 < 1.70? Also need to account for when versions only have 3 digits instead of 4
+            else {
+                echo "Installed version " + installedVersionClean + " is greater than " + latestVersionClean + ". No upgrade needed."
+                currentBuild.result = 'SUCCESS'
+                return
+            }
 
             // Parse the URL associated with the latest version
             firstURLClean = sh(returnStdout: true, script: """curl -sSL '${MC_MANIFEST_URL}' | jq -r '.versions[] | select( .id == ("${latestVersionClean}"))' | jq -r '.url'""").trim()
@@ -157,14 +162,14 @@ node {
         }
     }
 
-    // TODO
-    // This next stage really isn't needed since it's already started to do a version check.
-    // Do we shut down after an upgrade is complete IF the server was offline to begin with?
-    // Fix all the trims. Gosh. It's. So. Ugly
-
-    // Start Minecraft after the upgrade
-    stage ('Start Minecraft') {
-        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
+    // Start Minecraft after the upgrade only if it was running when we began.
+    if (isOffline == "RUNNING") {
+        stage ('Start Minecraft') {
+            common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "0")
+        }
+    }
+    else {
+        echo "Server was offline before the update; leaving it stopped."
     }
 
     // Notify users that things have finished

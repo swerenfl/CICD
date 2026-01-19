@@ -23,7 +23,7 @@ node {
 
     // Start Minecraft Stage. Need to turn on server at least to update server.properties
     stage ('Start Minecraft') {
-        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
+        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "0")
         start_check = env.INITIAL_CHECK
     }
 
@@ -37,7 +37,7 @@ node {
     stage ('Restart Minecraft') {
         common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}", "${G_INSTANCE}", "${G_SERV_ACCT}") // Stop
         common_stages.verifyMCSOffline("${G_ZONE}") // Verify
-        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}") // Start
+        common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "0") // Start
     }
 
     // Put minecraft back into the state it was when this job started
