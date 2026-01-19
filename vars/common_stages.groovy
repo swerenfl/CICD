@@ -4,10 +4,14 @@
 /*                PREFLIGHT STAGES                 */
 /* =============================================== */ 
 // Preflight
-def preflight() {
+def preflight(extraProperties = []) {
     try {
         echo "Set limit to Discard old builds. Keep last 10 builds. Further, disallow concurrent builds."
-        properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')), disableConcurrentBuilds()])
+        def baseProperties = [
+            buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')),
+            disableConcurrentBuilds()
+        ]
+        properties(baseProperties + extraProperties)
     }
     catch (err) {
         def failureMessage = 'While cleaning up the workspace, something went wrong. Review logs for further details'
@@ -130,6 +134,7 @@ def selectStartMode(startModeParam) {
         ]
     }
     def startModeLabel = (startMode == "1") ? "Fabric (fabric.jar)" : "Standard (server.jar)"
+    env.START_MODE = startMode
     env.START_MODE_LABEL = startModeLabel
     common_variables.envVariables()
     return startMode
