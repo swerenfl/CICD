@@ -52,7 +52,6 @@ def versionCk(gInstance, gZone, gServiceAcct, gProject) {
         gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} \
         --command='cd /home/minecraft && \
         sudo unzip -p server.jar version.json | jq -r .name' """
-        echo "The version we have installed is: ${versionCheck}"
     return versionCheck
 }
 
