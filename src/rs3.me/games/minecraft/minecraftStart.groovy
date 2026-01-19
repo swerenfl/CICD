@@ -34,9 +34,9 @@ node {
 
     // Notify users that things have finished
     stage ('Notify') {
+        common_stages.setMcsStatus("${G_ZONE}")
         common_stages.notifyEmail()
         common_stages.notifyDiscord()
         common_stages.notifySlack()
-        build job: 'Minecraft_STATUS'
     }
 }

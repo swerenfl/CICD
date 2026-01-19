@@ -7,8 +7,10 @@
 def envVariables() {
     env.MC_MANIFEST_URL = "https://launchermeta.mojang.com/mc/game/version_manifest.json"
     env.START_MODE_LABEL = env.START_MODE_LABEL ?: ""
+    env.MC_STATUS = env.MC_STATUS ?: ""
     def startModeSegment = env.START_MODE_LABEL?.trim() ? " | Start Mode: ${env.START_MODE_LABEL}" : ""
-    env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER${startModeSegment} | URL: $BUILD_URL"
+    def statusSegment = env.MC_STATUS?.trim() ? " | Status: ${env.MC_STATUS}" : ""
+    env.GENERAL_MESSAGE = "Job Name: $JOB_NAME | Build Number: $BUILD_NUMBER${startModeSegment}${statusSegment} | URL: $BUILD_URL"
     env.SLACK_NOTIFY_CHANNEL = "#08-gaming"
     env.G_KEY = "cd38590b-317c-4eb7-a58f-39a52d9234e4"
     env.G_PROJECT = "mc-server"

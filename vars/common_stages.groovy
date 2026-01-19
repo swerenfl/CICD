@@ -110,6 +110,13 @@ def notifyDiscord() {
 /* =============================================== */
 /*                GENERAL STAGES                   */
 /* =============================================== */ 
+// Capture current Minecraft status and update the general message.
+def setMcsStatus(gZone) {
+    def status = mc_helpers.checkUp("${gZone}")
+    env.MC_STATUS = status
+    common_variables.envVariables()
+}
+
 // Wait for Minecraft to start listening on port 25565.
 def waitForMcsReady(gInstance, gZone, gServiceAcct, gProject) {
     int attempts = 12

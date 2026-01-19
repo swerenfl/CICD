@@ -107,16 +107,16 @@ node {
     if (currentBuild.result == 'SUCCESS') {
         if (isOffline == "RUNNING") {
             def extraMessage = "Since the server was online when the update process started, the server was left on."
+            common_stages.setMcsStatus("${G_ZONE}")
             common_helpers.noUpdates("${extraMessage}")
-            build job: 'Minecraft_STATUS'
             return
         }
         else {
             def extraMessage = "Since the server was offline when the update process started, the server was shut off."
             common_stages.stopMCS("${G_ZONE}", "${G_PROJECT}")
             common_stages.verifyMCSOffline("${G_ZONE}")
+            common_stages.setMcsStatus("${G_ZONE}")
             common_helpers.noUpdates("${extraMessage}")
-            build job: 'Minecraft_STATUS'
             return
         }
     }
@@ -174,9 +174,9 @@ node {
 
     // Notify users that things have finished
     stage ('Notify') {
+        common_stages.setMcsStatus("${G_ZONE}")
         common_stages.notifyEmail()
         common_stages.notifyDiscord()
         common_stages.notifySlack()
-        build job: 'Minecraft_STATUS'
     }
 }
