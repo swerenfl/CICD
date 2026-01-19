@@ -106,6 +106,21 @@ def notifyDiscord() {
 /* =============================================== */
 /*                GENERAL STAGES                   */
 /* =============================================== */ 
+// Wait for Minecraft to start listening on port 25565.
+def waitForMcsReady(gInstance, gZone, gServiceAcct, gProject) {
+    int attempts = 12
+    int delaySeconds = 5
+    for (int i = 1; i <= attempts; i++) {
+        def status = sh(returnStatus: true, script: "gcloud compute ssh --project ${gInstance} --zone ${gZone} ${gServiceAcct}@${gProject} --command='ss -ltn | grep -q \":25565\"'")
+        if (status == 0) {
+            return
+        }
+        echo "Minecraft not ready yet (attempt ${i}/${attempts}). Waiting ${delaySeconds}s..."
+        sleep time: delaySeconds, unit: 'SECONDS'
+    }
+    throw new Exception("Minecraft did not report ready after ${attempts * delaySeconds} seconds.")
+}
+
 // Select Minecraft start mode and update the general message.
 def selectStartMode(startModeParam) {
     def startMode = startModeParam

@@ -29,6 +29,11 @@ node {
         common_stages.startMCS("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}", "${startMode}")
     }
 
+    // Wait until the server is listening before notifying users
+    stage ('Wait Ready') {
+        common_stages.waitForMcsReady("${G_INSTANCE}", "${G_ZONE}", "${G_SERV_ACCT}", "${G_PROJECT}")
+    }
+
     // Notify users that things have finished
     stage ('Notify') {
         common_stages.notifyEmail()
