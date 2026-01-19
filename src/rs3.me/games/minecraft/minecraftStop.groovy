@@ -12,7 +12,6 @@ node {
 
     // Load Env Variables
     common_variables.envVariables()
-
     def isOffline = 'null'
 
     // Preflight Stage

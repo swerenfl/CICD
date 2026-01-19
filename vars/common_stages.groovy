@@ -106,6 +106,20 @@ def notifyDiscord() {
 /* =============================================== */
 /*                GENERAL STAGES                   */
 /* =============================================== */ 
+// Select Minecraft start mode and update the general message.
+def selectStartMode(startModeParam) {
+    def startMode = startModeParam
+    if (!startMode) {
+        startMode = input message: 'Select Minecraft start mode', parameters: [
+            choice(name: 'START_MODE', choices: "0\n1", description: '0 = server.jar, 1 = fabric.jar')
+        ]
+    }
+    def startModeLabel = (startMode == "1") ? "Fabric (fabric.jar)" : "Standard (server.jar)"
+    env.START_MODE_LABEL = startModeLabel
+    common_variables.envVariables()
+    return startMode
+}
+
 // Start Minecraft
 def startMCS(gInstance, gZone, gServiceAcct, gProject, startMode) {
     try {
