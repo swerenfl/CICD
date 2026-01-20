@@ -39,8 +39,8 @@ node {
                 slackColor = '#ff3366'
                 discordColor = "FAILURE"
             }
-            slackSend channel: "${SLACK_NOTIFY_CHANNEL}", color: "${slackColor}", message: "The status of the server is ${isOffline}"
-            discordSend description: "The status of the server is ${isOffline}", footer: '', image: '', link: "${env.BUILD_URL}", result: "${discordColor}", thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${DISCORD_WEBHOOK}"
+            //slackSend channel: "${SLACK_NOTIFY_CHANNEL}", color: "${slackColor}", message: "The status of the server is ${isOffline}"
+            //discordSend description: "The status of the server is ${isOffline}", footer: '', image: '', link: "${env.BUILD_URL}", result: "${discordColor}", thumbnail: '', title: "${env.JOB_BASE_NAME}", webhookURL: "${DISCORD_WEBHOOK}"
         }
         catch (err) {
             def failureMessage = 'While executing the online check something went wrong. Review logs for further details'
