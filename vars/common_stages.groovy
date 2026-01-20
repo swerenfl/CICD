@@ -139,9 +139,7 @@ def selectStartMode(startModeParam) {
         startMode = env.START_MODE
     }
     if (startMode == null) {
-        startMode = input message: 'Select Minecraft start mode', parameters: [
-            choice(name: 'START_MODE', choices: "0\n1", description: '0 = server.jar, 1 = fabric.jar')
-        ]
+        startMode = "0"
     }
     startMode = "${startMode}".trim()
     def startModeLabel = (startMode == "1") ? "Fabric (fabric.jar)" : "Standard (server.jar)"
