@@ -135,6 +135,9 @@ def waitForMcsReady(gInstance, gZone, gServiceAcct, gProject) {
 // Select Minecraft start mode and update the general message.
 def selectStartMode(startModeParam) {
     def startMode = startModeParam
+    if (startMode == null && env.START_MODE?.trim()) {
+        startMode = env.START_MODE
+    }
     if (startMode == null) {
         startMode = input message: 'Select Minecraft start mode', parameters: [
             choice(name: 'START_MODE', choices: "0\n1", description: '0 = server.jar, 1 = fabric.jar')
