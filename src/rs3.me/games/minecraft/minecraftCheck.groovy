@@ -26,7 +26,7 @@ node {
     stage ('Check') {
         try {
             isOffline = mc_helpers.checkUp("${G_ZONE}")
-            echo "The current status of the server is: ${isOffline}"
+            echo "STATUS=${isOffline}"
             if (isOffline == 'RUNNING' || isOffline == 'REPAIRING') { // Green
                 slackColor = '#7ed321'
                 discordColor = "SUCCESS"
